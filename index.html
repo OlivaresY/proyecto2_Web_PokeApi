@@ -9,6 +9,49 @@
 
 <main class="container">
 
+    <div class="battle-layout">
+
+        <!-- PLAYER -->
+        <section class="pokemon player">
+
+            <!-- TRAINER -->
+            <div class="trainer-card">
+                <h1>Entrenador</h1>
+                <p id="trainer-name">Nombre</p>
+                <p id="trainer-town">Pueblo</p>
+                <p id="trainer-phrase">Frase</p>
+            </div>
+
+            <h2>Tu Pokémon:</h2>
+
+            <div class="pokemon-card" id="player-card">
+                <p class="loading">Cargando tu Pokémon...</p>
+            </div>
+
+        </section>
+
+        <!-- VS -->
+        <div class="vs">VS</div>
+
+        <!-- OPPONENT -->
+        <section class="pokemon opponent">
+
+            <h2>Oponente</h2>
+
+            <input 
+                type="text" 
+                id="search" 
+                placeholder="Buscar Pokémon..."
+            />
+
+            <div class="pokemon-card" id="opponent-card">
+                <p class="loading">Busca un Pokémon...</p>
+            </div>
+
+        </section>
+
+    </div>
+
 </main>
 
 <script type="module" src="./main.js"></script>
