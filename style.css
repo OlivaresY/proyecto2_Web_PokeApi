@@ -1,3 +1,7 @@
+/* ========================= */
+/* COMMIT 1 – BÁSICO */
+/* ========================= */
+
 /* Reset */
 * {
     margin: 0;
@@ -20,6 +24,9 @@ body {
     text-align: center;
 }
 
+/* ========================= */
+/* COMMIT 2 – MEDIO */
+/* ========================= */
 
 /* TRAINER */
 .trainer-card {
@@ -105,4 +112,90 @@ body {
 /* Nombre */
 .pokemon-card p strong {
     font-size: 18px;
+}
+
+/* ========================= */
+/* COMMIT 3 – AVANZADO */
+/* ========================= */
+
+/* STATS EN UNA SOLA LÍNEA */
+.pokemon-stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+
+    margin-top: 12px;
+    font-weight: bold;
+    font-size: 14px;
+
+    flex-wrap: nowrap;
+}
+
+.pokemon-stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    white-space: nowrap;
+
+    background: #0f172a;
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: 1px solid #3a69af;
+}
+
+/* INPUT */
+input {
+    margin: 10px 0;
+    padding: 10px;
+    width: 80%;
+    border-radius: 8px;
+    border: 2px solid #3a69af;
+    background-color: #15294b;
+    color: white;
+    font-size: 16px;
+}
+
+input::placeholder {
+    color: #8fa9d1;
+}
+
+/* BOTÓN CENTRADO EXACTO */
+.battle-action {
+    width: 100%;
+    max-width: 900px; /* mismo ancho que battle-layout */
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    background: #f2d33b;
+    color: #0f172a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+    background-color: #d4ba2e;
+    transform: scale(1.05);
+}
+
+button:disabled {
+    background: gray;
+    cursor: not-allowed;
+}
+
+/* LOADING */
+.loading {
+    color: #94a3b8;
+    font-style: italic;
+    text-align: center;
+    margin-top: 50px;
 }
