@@ -6,12 +6,12 @@ const opponentCardEl = document.getElementById("opponent-card");
 const searchInput = document.getElementById("search");
 const battleBtn = document.getElementById("battle-btn");
 
-//Trainer info
+// Trainer info
 document.getElementById("trainer-name").textContent = TRAINER.name;
 document.getElementById("trainer-town").textContent = TRAINER.hometown;
 document.getElementById("trainer-phrase").textContent = TRAINER.catchphrase;
 
-//Emojis
+// Emojis
 const typeEmoji = (type) => ({
   electric: "⚡",
   water: "💧",
@@ -33,7 +33,7 @@ const typeEmoji = (type) => ({
   normal: "⬜"
 }[type] || "❓");
 
-//Colores
+// Colores
 const typeColor = (type) => ({
   electric: "#f9e045",
   water: "#3da4f7",
@@ -55,7 +55,7 @@ const typeColor = (type) => ({
   normal: "#a8a878"
 }[type] || "#777");
 
-//Skeleton
+// Skeleton
 function renderSkeleton(container) {
   container.innerHTML = `
     <div class="skeleton skeleton-img"></div>
@@ -64,8 +64,17 @@ function renderSkeleton(container) {
   `;
 }
 
-//Render Pokemon
-function renderPokemonInfo(data, container, isPlayer = false) {
+// 🔥 NUEVO: obtener detalles de moves con Promise.allSettled
+async function getMovesDetails(moves) {
+  const results = await Promise.allSettled(
+    moves.map(move => fetch(move.move.url).then(res => res.json()))
+  );
+
+  return results;
+}
+
+// Render Pokémon
+async function renderPokemonInfo(data, container, isPlayer = false) {
   const name = data.name;
   const type = data.types[0].type.name;
   const hp = data.stats.find(s => s.stat.name === "hp").base_stat;
@@ -81,66 +90,86 @@ function renderPokemonInfo(data, container, isPlayer = false) {
     <div class="moves-buttons"></div>
   `;
 
-  if (isPlayer) {
-    const movesContainer = container.querySelector(".moves-buttons");
-    const moves = data.moves.slice(0, 3);
+  const movesContainer = container.querySelector(".moves-buttons");
 
-    for (let move of moves) {
-      const btn = document.createElement("button");
-      btn.className = "move-btn";
-      btn.textContent = move.move.name;
-      movesContainer.appendChild(btn);
+  const moves = data.moves.slice(0, 3);
+
+  // 🔥 AQUÍ USAMOS Promise.allSettled
+  const movesResults = await getMovesDetails(moves);
+
+  movesResults.forEach((result, index) => {
+    const btn = document.createElement("button");
+    btn.className = "move-btn";
+
+    if (result.status === "fulfilled") {
+      const move = result.value;
+
+      btn.textContent = `${move.name} ${typeEmoji(move.type.name)}`;
+      btn.classList.add(move.type.name);
+
+    } else {
+      const fallbackName = moves[index].move.name;
+      btn.textContent = `${fallbackName} ❓`;
+      btn.classList.add("unknown");
     }
-  }
+
+    movesContainer.appendChild(btn);
+  });
 }
 
-//Cargar Pokemon jugador
+// Cargar Pokémon jugador
 async function loadPlayerPokemon() {
   try {
     renderSkeleton(playerCardEl);
 
-    // 🔥 delay para ver skeleton
     await new Promise(res => setTimeout(res, 800));
 
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${TRAINER.favoritePokemon}`);
     const data = await res.json();
 
-    renderPokemonInfo(data, playerCardEl, true);
+    await renderPokemonInfo(data, playerCardEl, true);
   } catch {
     playerCardEl.innerHTML = `<p>Error cargando tu Pokémon</p>`;
   }
 }
 
-//Buscar oponente
+// Buscar oponente
 async function searchOpponent(name) {
   if (!name) return;
 
   try {
     renderSkeleton(opponentCardEl);
 
-    // 🔥 delay para ver skeleton
     await new Promise(res => setTimeout(res, 800));
 
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
     const data = await res.json();
 
-    renderPokemonInfo(data, opponentCardEl);
+    await renderPokemonInfo(data, opponentCardEl);
     battleBtn.disabled = false;
+
   } catch {
     opponentCardEl.innerHTML = `<p>Pokémon no encontrado</p>`;
     battleBtn.disabled = true;
   }
 }
 
-//Evento input
+// 🔥 DEBOUNCE
+let debounceTimeout;
+
 searchInput.addEventListener("input", (e) => {
-  searchOpponent(e.target.value);
+  clearTimeout(debounceTimeout);
+
+  debounceTimeout = setTimeout(() => {
+    const value = e.target.value.trim();
+    searchOpponent(value);
+  }, 400);
 });
 
-//Boton batalla
+// Botón batalla
 battleBtn.addEventListener("click", () => {
   window.location.href = "../stage-2/index.html";
 });
 
-//Init
+// Init
 loadPlayerPokemon();
