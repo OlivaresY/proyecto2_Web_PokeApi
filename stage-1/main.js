@@ -21,9 +21,9 @@ const state = {
 let controller = null;
 
 // Trainer info
-document.getElementById("trainer-name").textContent = TRAINER.name;
-document.getElementById("trainer-town").textContent = TRAINER.hometown;
-document.getElementById("trainer-phrase").textContent = TRAINER.catchphrase;
+document.getElementById("trainer-name").textContent = `👤 ${TRAINER.name}`;
+document.getElementById("trainer-town").textContent = `📍 ${TRAINER.hometown}`;
+document.getElementById("trainer-phrase").textContent = `💬 ${TRAINER.catchphrase}`;
 
 // 🔄 RENDER CENTRAL (TODO pasa por aquí)
 function render() {
@@ -53,7 +53,7 @@ async function loadPlayerPokemon() {
     state.loadingPlayer = true;
     render();
 
-    const data = await fetchPokemon(TRAINER.favoritePokemon);
+    const data = await fetchPokemon(TRAINER.favoritePokemon.toLowerCase());
     await delay(600); // efecto visual
 
     state.player = data;
@@ -66,9 +66,14 @@ async function loadPlayerPokemon() {
   }
 }
 
-// 🔎 BUSCAR OPONENTE
+// 🔎 BUSCAR OPONENTE (CORREGIDO)
 async function searchOpponent(name) {
-  if (!name) return;
+  if (!name) {
+    state.opponent = null;
+    state.errorOpponent = null;
+    render();
+    return;
+  }
 
   try {
     // Cancelar búsqueda anterior
