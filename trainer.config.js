@@ -1,6 +1,15 @@
 export default {
-  name: "Nombre: YOR",                
-  hometown: "Pueblo: PZ",             
-  catchphrase: "Frase: ¡Confío en mis Pokémon!", 
-  favoritePokemon: "golduck"  
+  name: "YOR",
+  hometown: "PZ",
+  catchphrase: "¡Confío en mis Pokémon!",
+
+  favoritePokemon: "golduck",
+  nickname: "Aqua Hunter",
+  battleCry: "¡Golduck, arrasa todo!",
+
+  definitiveMoveName: "Tsunami Final",
+  definitiveMoveFlavor: "Una ola gigante destruye todo a su paso.",
+
+  winMessage: "Sabía que ganaríamos.",
+  loseMessage: "Esto no termina aquí."
 };
