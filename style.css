@@ -1,5 +1,4 @@
-
-/*Reset*/
+/* Reset */
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +11,7 @@ body {
     color: white;
 }
 
-/*Contenedor principal*/
+/* Contenedor principal */
 .container {
     max-width: 1100px;
     margin: auto;
@@ -20,8 +19,7 @@ body {
     text-align: center;
 }
 
-
-/*Trainer*/
+/* Trainer */
 .trainer-card {
     background: #1e293b;
     padding: 15px;
@@ -35,7 +33,7 @@ body {
     margin: 5px 0;
 }
 
-/*Layout Battle*/
+/* Layout Battle */
 .battle-wrapper {
     display: flex;
     flex-direction: column;
@@ -73,7 +71,7 @@ body {
     width: 100px;
 }
 
-/*Tarjetas pokemon*/
+/* Tarjetas pokemon */
 .pokemon-card {
     background: #1e293b;
     padding: 20px;
@@ -86,6 +84,11 @@ body {
     align-items: center;
 }
 
+/* 🔥 IMPORTANTE: ahora el fondo dinámico del JS funciona mejor */
+.pokemon-card.dynamic-bg {
+    transition: background-color 0.3s ease;
+}
+
 .pokemon-sprite {
     width: 130px;
     height: 130px;
@@ -93,34 +96,24 @@ body {
     margin-bottom: 10px;
 }
 
-.pokemon-card p strong {
-    font-size: 18px;
-}
-
-/*Stats*/
+/* Stats */
 .pokemon-stats {
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 15px;
     margin-top: 12px;
     font-weight: bold;
     font-size: 14px;
-    flex-wrap: nowrap;
 }
 
 .pokemon-stats span {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    white-space: nowrap;
     background: #0f172a;
     padding: 5px 8px;
     border-radius: 6px;
     border: 1px solid #3a69af;
 }
 
-/*Input*/
+/* Input */
 input {
     margin: 10px 0;
     padding: 10px;
@@ -129,53 +122,24 @@ input {
     border: 2px solid #3a69af;
     background-color: #15294b;
     color: white;
-    font-size: 16px;
 }
 
-input::placeholder {
-    color: #8fa9d1;
-}
-
-/*Boton principal*/
-.battle-action {
-    width: 100%;
-    max-width: 900px;
-    margin-top: 25px;
-    display: flex;
-    justify-content: center;
-}
-
+/* Botón */
 button {
     padding: 15px 30px;
     font-size: 18px;
-    border: none;
     border-radius: 10px;
     background: #f2d33b;
     color: #0f172a;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-button:hover:not(:disabled) {
-    background-color: #d4ba2e;
-    transform: scale(1.05);
 }
 
 button:disabled {
     background: gray;
-    cursor: not-allowed;
 }
 
-/*Loading*/
-.loading {
-    color: #94a3b8;
-    font-style: italic;
-    text-align: center;
-    margin-top: 50px;
-}
-
-/*Moves*/
+/* Moves */
 .moves-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -184,28 +148,15 @@ button:disabled {
 }
 
 .move-btn {
-    padding: 10px 14px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
+    padding: 10px;
+    border-radius: 10px;
     cursor: pointer;
-    color: #fff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-    transition: transform 0.1s ease, background-color 0.2s ease;
+    color: white;
 }
 
-.move-btn:hover {
-    transform: scale(1.05);
-}
-
-/*Colores por tipo*/
-.move-btn.electric { background-color: #f1d93b; color: #000; }
-.move-btn.water { background-color: #4ab6ef; }
-.move-btn.fire { background-color: #f75c03; }
-.move-btn.grass { background-color: #56c02b; }
-.move-btn.psychic { background-color: #d857f3; }
-.move-btn.dragon { background-color: #6a5cff; }
-.move-btn.ghost { background-color: #7b4da0; }
-.move-btn.normal { background-color: #a8a878; }
-.move-btn.unknown { background-color: #555; }
+/* Tipos */
+.move-btn.fire { background: #f75c03; }
+.move-btn.water { background: #4ab6ef; }
+.move-btn.electric { background: #f1d93b; color: black; }
+.move-btn.grass { background: #56c02b; }
+.move-btn.unknown { background: #555; }
