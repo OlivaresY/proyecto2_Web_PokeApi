@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokémon Battle</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<main class="container">
+
+    <div class="battle-layout">
+
+        <!--Jugador-->
+        <section class="pokemon player">
+
+            <!-- Entrenador -->
+            <div class="trainer-card">
+                <h1>Entrenador</h1>
+                <p id="trainer-name">Nombre</p>
+                <p id="trainer-town">Pueblo</p>
+                <p id="trainer-phrase">Frase</p>
+            </div>
+
+            <h2>Tu Pokémon:</h2>
+
+            <div class="pokemon-card dynamic-bg" id="player-card">
+                <p class="loading">Cargando tu Pokémon...</p>
+            </div>
+
+        </section>
+
+        <!--VS-->
+        <div class="vs">VS</div>
+
+        <!--Oponente-->
+        <section class="pokemon opponent">
+
+            <div class="trainer-card">
+                <h2>Oponente</h2>
+                <p id="opponent-name">Nombre: Desconocido</p>
+                <p id="opponent-town">Pueblo: Desconocido</p>
+                <p id="opponent-phrase">Frase: Desconocida</p>
+            </div>
+
+            <input 
+                type="text" 
+                id="search" 
+                placeholder="Buscar Pokémon..."
+            />
+
+            <div class="pokemon-card dynamic-bg" id="opponent-card">
+                <p class="loading">Busca un Pokémon...</p>
+            </div>
+
+        </section>
+
+    </div>
+
+    <!--Boton centrado-->
+    <div class="battle-action">
+        <button id="battle-btn" disabled>
+            Ir a batalla
+        </button>
+    </div>
+
+</main>
+
+<script type="module" src="./main.js"></script>
+
+</body>
+</html>
