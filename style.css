@@ -45,7 +45,7 @@ body {
     align-items: stretch;
     justify-content: space-between;
     gap: 20px;
-    margin-top: 30px;
+    margin: 30px auto; /* 🔥 ESTE ES EL FIX */
     width: 100%;
     max-width: 900px;
 }
@@ -160,3 +160,12 @@ button:disabled {
 .move-btn.electric { background: #f1d93b; color: black; }
 .move-btn.grass { background: #56c02b; }
 .move-btn.unknown { background: #555; }
+
+/* Botón centrado */
+.battle-action {
+    width: 100%;
+    max-width: 900px;
+    margin: 25px auto;
+    display: flex;
+    justify-content: center;
+}
