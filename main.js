@@ -23,7 +23,10 @@ document.getElementById("trainer-name").textContent = TRAINER.name;
 document.getElementById("trainer-town").textContent = TRAINER.hometown;
 document.getElementById("trainer-phrase").textContent = TRAINER.catchphrase;
 
-// Emojis
+// Delay helper
+const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+// Emojis tipo
 const typeEmoji = (type) => ({
   electric: "⚡",
   water: "💧",
@@ -76,7 +79,27 @@ function renderSkeleton(container) {
   `;
 }
 
-// Moves
+// 🔥 FILTRAR SOLO MOVES PROPIOS POR NIVEL Y ASEGURAR 4 MOVES
+function getValidMoves(data) {
+  const levelUpMoves = data.moves
+    .filter(move =>
+      move.version_group_details.some(v => v.move_learn_method.name === "level-up")
+    )
+    .map(move => {
+      const minLevel = Math.min(
+        ...move.version_group_details
+          .filter(v => v.move_learn_method.name === "level-up")
+          .map(v => v.level_learned_at)
+      );
+      return { ...move, minLevel };
+    });
+
+  levelUpMoves.sort((a, b) => a.minLevel - b.minLevel);
+
+  return levelUpMoves.slice(-4);
+}
+
+// Moves details
 async function getMovesDetails(moves) {
   return await Promise.allSettled(
     moves.map(move => fetch(move.move.url).then(res => res.json()))
@@ -85,15 +108,12 @@ async function getMovesDetails(moves) {
 
 // RENDER CENTRAL
 function render() {
-
-  // PLAYER
   if (state.loadingPlayer) {
     renderSkeleton(playerCardEl);
   } else if (state.player) {
-    renderPokemon(state.player, playerCardEl, true);
+    renderPokemon(state.player, playerCardEl);
   }
 
-  // OPPONENT
   if (state.loadingOpponent) {
     renderSkeleton(opponentCardEl);
   } else if (state.errorOpponent) {
@@ -102,13 +122,17 @@ function render() {
     renderPokemon(state.opponent, opponentCardEl);
   }
 
-  // BOTÓN
   battleBtn.disabled = !(state.player && state.opponent);
 }
 
 // Render Pokemon
-async function renderPokemon(data, container, isPlayer = false) {
+async function renderPokemon(data, container) {
   const type = data.types[0].type.name;
+
+  const hp = data.stats.find(s => s.stat.name === "hp").base_stat;
+  const attack = data.stats.find(s => s.stat.name === "attack").base_stat;
+  const defense = data.stats.find(s => s.stat.name === "defense").base_stat;
+  const speed = data.stats.find(s => s.stat.name === "speed").base_stat;
 
   container.classList.add("dynamic-bg");
   container.style.backgroundColor = typeColor(type);
@@ -116,29 +140,40 @@ async function renderPokemon(data, container, isPlayer = false) {
   container.innerHTML = `
     <img src="${data.sprites.front_default}" class="pokemon-sprite">
     <p><strong>${data.name} ${typeEmoji(type)}</strong></p>
-    <p>HP: ${data.stats.find(s => s.stat.name === "hp").base_stat}</p>
+
+    <div class="pokemon-stats">
+      <span>❤️ ${hp}</span>
+      <span>⚔️ ${attack}</span>
+      <span>🛡️ ${defense}</span>
+      <span>⚡ ${speed}</span>
+    </div>
+
     <div class="moves-buttons"></div>
   `;
 
   const movesContainer = container.querySelector(".moves-buttons");
-  const moves = data.moves.slice(0, 3);
 
-  const results = await getMovesDetails(moves);
+  const validMoves = getValidMoves(data);
+  const results = await getMovesDetails(validMoves);
 
-  results.forEach((res, i) => {
+  // Siempre 4 botones
+  for (let i = 0; i < 4; i++) {
     const btn = document.createElement("button");
     btn.className = "move-btn";
 
-    if (res.status === "fulfilled") {
-      btn.textContent = res.value.name;
-      btn.classList.add(res.value.type.name);
+    if (results[i] && results[i].status === "fulfilled") {
+      btn.textContent = results[i].value.name;
+      btn.classList.add(results[i].value.type.name);
+    } else if (validMoves[i]) {
+      btn.textContent = validMoves[i].move.name;
+      btn.classList.add("unknown");
     } else {
-      btn.textContent = moves[i].move.name;
+      btn.textContent = "-"; // Placeholder si no hay 4 moves
       btn.classList.add("unknown");
     }
 
     movesContainer.appendChild(btn);
-  });
+  }
 }
 
 // Load player
@@ -148,6 +183,8 @@ async function loadPlayerPokemon() {
     render();
 
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${TRAINER.favoritePokemon}`);
+    await delay(600);
+
     state.player = await res.json();
 
   } catch {
@@ -175,11 +212,12 @@ async function searchOpponent(name) {
       { signal: controller.signal }
     );
 
+    await delay(600);
+
     const data = await res.json();
 
     state.opponent = data;
 
-    // Guardar último oponente
     localStorage.setItem("lastOpponent", name);
 
   } catch (error) {
@@ -215,7 +253,7 @@ function loadLastOpponent() {
   }
 }
 
-// 🔥 BOTÓN → GUARDAR PARA STAGE 2
+// Botón
 battleBtn.addEventListener("click", () => {
   localStorage.setItem("playerPokemon", JSON.stringify(state.player));
   localStorage.setItem("opponentPokemon", JSON.stringify(state.opponent));
@@ -225,4 +263,3 @@ battleBtn.addEventListener("click", () => {
 
 // Init
 loadPlayerPokemon();
-loadLastOpponent();

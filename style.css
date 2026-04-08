@@ -45,7 +45,7 @@ body {
     align-items: stretch;
     justify-content: space-between;
     gap: 20px;
-    margin: 30px auto; /* 🔥 ESTE ES EL FIX */
+    margin: 30px auto;
     width: 100%;
     max-width: 900px;
 }
@@ -84,7 +84,7 @@ body {
     align-items: center;
 }
 
-/* 🔥 IMPORTANTE: ahora el fondo dinámico del JS funciona mejor */
+/* Fondo dinámico */
 .pokemon-card.dynamic-bg {
     transition: background-color 0.3s ease;
 }
@@ -145,13 +145,18 @@ button:disabled {
     flex-wrap: wrap;
     gap: 8px;
     justify-content: center;
+    margin-top: 15px;
 }
 
+/* 🔥 FIX AQUÍ */
 .move-btn {
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;
     color: white;
+
+    border: 2px solid rgba(255,255,255,0.25); /* 👈 borde más grueso */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);   /* 👈 sombra suave */
 }
 
 /* Tipos */
@@ -170,7 +175,7 @@ button:disabled {
     justify-content: center;
 }
 
-/* 🔥 SKELETON (AGREGADO) */
+/* Skeleton */
 .skeleton {
     background: linear-gradient(
         90deg,
@@ -183,13 +188,11 @@ button:disabled {
     border-radius: 8px;
 }
 
-/* Animación */
 @keyframes shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
 }
 
-/* Variantes */
 .skeleton-img {
     width: 130px;
     height: 130px;
