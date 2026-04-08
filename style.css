@@ -1,4 +1,4 @@
-/* Reset */
+/* Reset y básicos */
 * {
     margin: 0;
     padding: 0;
@@ -34,12 +34,6 @@ body {
 }
 
 /* Layout Battle */
-.battle-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .battle-layout {
     display: flex;
     align-items: stretch;
@@ -61,26 +55,46 @@ body {
     background: #15294b;
 }
 
+/* VS centrado con brillo */
 .vs {
-    position: relative;
     font-size: 60px;
     font-weight: bold;
+    color: #ebe707;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100px;
+    flex: 0 0 100px; /* ancho fijo para centrar */
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
 
-    /* Gradient para efecto de luz */
+.vs span, #battle-btn span {
+    position: relative;
+    display: inline-block;
+}
+
+.vs span::before,
+#battle-btn span::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
     background: linear-gradient(
-        90deg,
-        #ebe707 20%,
-        #ffffff 50%,
-        #ebe707 80%
+        120deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.5) 50%,
+        rgba(255,255,255,0) 100%
     );
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     animation: shine 2s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
 }
 
 /* Tarjetas pokemon */
@@ -137,29 +151,21 @@ input {
 }
 
 /* Botón */
-button {
+#battle-btn {
     padding: 15px 30px;
     font-size: 18px;
     border-radius: 10px;
-    cursor: pointer;
+    background: #f2d33b;
+    color: #ffffff;
     font-weight: bold;
-    border: none;
+    cursor: pointer;
     position: relative;
     overflow: hidden;
-
-    /* Gradient para efecto luz */
-    background-image: linear-gradient(
-        90deg,
-        #f2d33b 0%,
-        #ffffff 50%,
-        #f2d33b 100%
-    );
-    background-size: 200% 100%;
-    animation: shine 2s linear infinite;
 }
 
-button:disabled {
+#battle-btn:disabled {
     background: gray;
+    cursor: not-allowed;
 }
 
 /* Moves */
@@ -171,23 +177,17 @@ button:disabled {
     margin-top: 15px;
 }
 
-/* 🔥 FIX AQUÍ */
 .move-btn {
     padding: 10px;
     border-radius: 10px;
     cursor: pointer;
     color: white;
-
-    border: 2px solid rgba(255,255,255,0.25); /* 👈 borde más grueso */
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);   /* 👈 sombra suave */
+    background: #f2d33b;
+    border: 2px solid #000;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    flex: 1 1 calc(45% - 10px);
+    min-width: 80px;
 }
-
-/* Tipos */
-.move-btn.fire { background: #f75c03; }
-.move-btn.water { background: #4ab6ef; }
-.move-btn.electric { background: #f1d93b; color: black; }
-.move-btn.grass { background: #56c02b; }
-.move-btn.unknown { background: #555; }
 
 /* Botón centrado */
 .battle-action {
@@ -212,11 +212,6 @@ button:disabled {
 }
 
 @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
-
-@keyframes shine {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
 }

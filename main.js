@@ -28,20 +28,46 @@ const delay = (ms) => new Promise(res => setTimeout(res, ms));
 
 // Emojis tipo
 const typeEmoji = (type) => ({
-  electric: "⚡", water: "💧", fire: "🔥", grass: "🌿",
-  ice: "❄️", fighting: "🥊", poison: "☠️", ground: "🌍",
-  flying: "🕊️", psychic: "🔮", bug: "🐛", rock: "🪨",
-  ghost: "👻", dragon: "🐉", dark: "🌑", steel: "⚙️",
-  fairy: "✨", normal: "⬜"
+  electric: "⚡",
+  water: "💧",
+  fire: "🔥",
+  grass: "🌿",
+  ice: "❄️",
+  fighting: "🥊",
+  poison: "☠️",
+  ground: "🌍",
+  flying: "🕊️",
+  psychic: "🔮",
+  bug: "🐛",
+  rock: "🪨",
+  ghost: "👻",
+  dragon: "🐉",
+  dark: "🌑",
+  steel: "⚙️",
+  fairy: "✨",
+  normal: "⬜"
 }[type] || "❓");
 
 // Colores
 const typeColor = (type) => ({
-  electric: "#f9e045", water: "#3da4f7", fire: "#f75c03", grass: "#63c74d",
-  ice: "#9de0ff", fighting: "#d56723", poison: "#b97fc9", ground: "#e0c068",
-  flying: "#a890f0", psychic: "#f85888", bug: "#a8b820", rock: "#b8a038",
-  ghost: "#705898", dragon: "#7038f8", dark: "#705848", steel: "#b8b8d0",
-  fairy: "#f4bdc9", normal: "#a8a878"
+  electric: "#f9e045",
+  water: "#3da4f7",
+  fire: "#f75c03",
+  grass: "#63c74d",
+  ice: "#9de0ff",
+  fighting: "#d56723",
+  poison: "#b97fc9",
+  ground: "#e0c068",
+  flying: "#a890f0",
+  psychic: "#f85888",
+  bug: "#a8b820",
+  rock: "#b8a038",
+  ghost: "#705898",
+  dragon: "#7038f8",
+  dark: "#705848",
+  steel: "#b8b8d0",
+  fairy: "#f4bdc9",
+  normal: "#a8a878"
 }[type] || "#777");
 
 // Skeleton
@@ -69,6 +95,7 @@ function getValidMoves(data) {
     });
 
   levelUpMoves.sort((a, b) => a.minLevel - b.minLevel);
+
   return levelUpMoves.slice(-4);
 }
 
@@ -81,12 +108,19 @@ async function getMovesDetails(moves) {
 
 // RENDER CENTRAL
 function render() {
-  if (state.loadingPlayer) renderSkeleton(playerCardEl);
-  else if (state.player) renderPokemon(state.player, playerCardEl);
+  if (state.loadingPlayer) {
+    renderSkeleton(playerCardEl);
+  } else if (state.player) {
+    renderPokemon(state.player, playerCardEl);
+  }
 
-  if (state.loadingOpponent) renderSkeleton(opponentCardEl);
-  else if (state.errorOpponent) opponentCardEl.innerHTML = `<p>${state.errorOpponent}</p>`;
-  else if (state.opponent) renderPokemon(state.opponent, opponentCardEl);
+  if (state.loadingOpponent) {
+    renderSkeleton(opponentCardEl);
+  } else if (state.errorOpponent) {
+    opponentCardEl.innerHTML = `<p>${state.errorOpponent}</p>`;
+  } else if (state.opponent) {
+    renderPokemon(state.opponent, opponentCardEl);
+  }
 
   battleBtn.disabled = !(state.player && state.opponent);
 }
@@ -129,13 +163,10 @@ async function renderPokemon(data, container) {
 
     if (results[i] && results[i].status === "fulfilled") {
       btn.textContent = results[i].value.name;
-      btn.classList.add(results[i].value.type.name);
     } else if (validMoves[i]) {
       btn.textContent = validMoves[i].move.name;
-      btn.classList.add("unknown");
     } else {
       btn.textContent = "-";
-      btn.classList.add("unknown");
     }
 
     movesContainer.appendChild(btn);
@@ -150,7 +181,9 @@ async function loadPlayerPokemon() {
 
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${TRAINER.favoritePokemon}`);
     await delay(600);
+
     state.player = await res.json();
+
   } catch {
     playerCardEl.innerHTML = `<p>Error cargando tu Pokémon</p>`;
   } finally {
@@ -177,13 +210,19 @@ async function searchOpponent(name) {
     );
 
     await delay(600);
+
     const data = await res.json();
+
     state.opponent = data;
+
     localStorage.setItem("lastOpponent", name);
+
   } catch (error) {
     if (error.name === "AbortError") return;
+
     state.errorOpponent = "Pokémon no encontrado";
     state.opponent = null;
+
   } finally {
     state.loadingOpponent = false;
     render();
@@ -192,8 +231,10 @@ async function searchOpponent(name) {
 
 // Debounce
 let debounceTimeout;
+
 searchInput.addEventListener("input", (e) => {
   clearTimeout(debounceTimeout);
+
   debounceTimeout = setTimeout(() => {
     searchOpponent(e.target.value.trim());
   }, 400);
@@ -202,6 +243,7 @@ searchInput.addEventListener("input", (e) => {
 // Cargar último oponente
 function loadLastOpponent() {
   const last = localStorage.getItem("lastOpponent");
+
   if (last) {
     searchInput.value = last;
     searchOpponent(last);
@@ -212,6 +254,7 @@ function loadLastOpponent() {
 battleBtn.addEventListener("click", () => {
   localStorage.setItem("playerPokemon", JSON.stringify(state.player));
   localStorage.setItem("opponentPokemon", JSON.stringify(state.opponent));
+
   window.location.href = "../stage-2/index.html";
 });
 
