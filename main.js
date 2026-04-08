@@ -1,4 +1,4 @@
-import TRAINER from "../trainer.config.js";
+import TRAINER from "./trainer.config.js";
 
 // DOM
 const playerCardEl = document.getElementById("player-card");
@@ -6,29 +6,66 @@ const opponentCardEl = document.getElementById("opponent-card");
 const searchInput = document.getElementById("search");
 const battleBtn = document.getElementById("battle-btn");
 
-// Trainer info
+//Trainer info
 document.getElementById("trainer-name").textContent = TRAINER.name;
 document.getElementById("trainer-town").textContent = TRAINER.hometown;
 document.getElementById("trainer-phrase").textContent = TRAINER.catchphrase;
 
-// Emojis
+//Emojis
 const typeEmoji = (type) => ({
   electric: "⚡",
   water: "💧",
   fire: "🔥",
   grass: "🌿",
+  ice: "❄️",
+  fighting: "🥊",
+  poison: "☠️",
+  ground: "🌍",
+  flying: "🕊️",
+  psychic: "🔮",
+  bug: "🐛",
+  rock: "🪨",
+  ghost: "👻",
+  dragon: "🐉",
+  dark: "🌑",
+  steel: "⚙️",
+  fairy: "✨",
+  normal: "⬜"
 }[type] || "❓");
 
-// Colores
+//Colores
 const typeColor = (type) => ({
   electric: "#f9e045",
   water: "#3da4f7",
   fire: "#f75c03",
   grass: "#63c74d",
+  ice: "#9de0ff",
+  fighting: "#d56723",
+  poison: "#b97fc9",
+  ground: "#e0c068",
+  flying: "#a890f0",
+  psychic: "#f85888",
+  bug: "#a8b820",
+  rock: "#b8a038",
+  ghost: "#705898",
+  dragon: "#7038f8",
+  dark: "#705848",
+  steel: "#b8b8d0",
+  fairy: "#f4bdc9",
+  normal: "#a8a878"
 }[type] || "#777");
 
-// Render Pokémon
-async function renderPokemonInfo(data, container, isPlayer = false) {
+//Skeleton
+function renderSkeleton(container) {
+  container.innerHTML = `
+    <div class="skeleton skeleton-img"></div>
+    <div class="skeleton skeleton-text"></div>
+    <div class="skeleton skeleton-text"></div>
+  `;
+}
+
+//Render Pokemon
+function renderPokemonInfo(data, container, isPlayer = false) {
   const name = data.name;
   const type = data.types[0].type.name;
   const hp = data.stats.find(s => s.stat.name === "hp").base_stat;
@@ -46,7 +83,6 @@ async function renderPokemonInfo(data, container, isPlayer = false) {
 
   if (isPlayer) {
     const movesContainer = container.querySelector(".moves-buttons");
-
     const moves = data.moves.slice(0, 3);
 
     for (let move of moves) {
@@ -58,34 +94,47 @@ async function renderPokemonInfo(data, container, isPlayer = false) {
   }
 }
 
-// Cargar Pokémon jugador
+//Cargar Pokemon jugador
 async function loadPlayerPokemon() {
-  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${TRAINER.favoritePokemon}`);
-  const data = await res.json();
-  renderPokemonInfo(data, playerCardEl, true);
+  try {
+    renderSkeleton(playerCardEl); // 👈 skeleton
+
+    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${TRAINER.favoritePokemon}`);
+    const data = await res.json();
+
+    renderPokemonInfo(data, playerCardEl, true);
+  } catch {
+    playerCardEl.innerHTML = `<p>Error cargando tu Pokémon</p>`;
+  }
 }
 
-// Buscar oponente
+//Buscar oponente
 async function searchOpponent(name) {
+  if (!name) return;
+
   try {
+    renderSkeleton(opponentCardEl); // 👈 skeleton
+
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
     const data = await res.json();
+
     renderPokemonInfo(data, opponentCardEl);
     battleBtn.disabled = false;
   } catch {
+    opponentCardEl.innerHTML = `<p>Pokémon no encontrado</p>`;
     battleBtn.disabled = true;
   }
 }
 
-// Evento input
+//Evento input
 searchInput.addEventListener("input", (e) => {
   searchOpponent(e.target.value);
 });
 
-// Botón batalla
+//Boton batalla
 battleBtn.addEventListener("click", () => {
   window.location.href = "../stage-2/index.html";
 });
 
-// Init
+//Init
 loadPlayerPokemon();
