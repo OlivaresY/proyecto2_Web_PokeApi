@@ -1,4 +1,4 @@
-export default {
+const TRAINER = {
   name: "YOR",
   hometown: "PZ",
   catchphrase: "¡Confío en mis Pokémon!",
@@ -13,3 +13,5 @@ export default {
   winMessage: "Sabía que ganaríamos.",
   loseMessage: "Esto no termina aquí."
 };
+
+export default TRAINER;

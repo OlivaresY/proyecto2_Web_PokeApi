@@ -17,7 +17,7 @@ const state = {
   errorOpponent: null
 };
 
-// AbortController
+// AbortController (para cancelar búsquedas anteriores)
 let controller = null;
 
 // Trainer info
@@ -25,14 +25,16 @@ document.getElementById("trainer-name").textContent = TRAINER.name;
 document.getElementById("trainer-town").textContent = TRAINER.hometown;
 document.getElementById("trainer-phrase").textContent = TRAINER.catchphrase;
 
-// RENDER CENTRAL
+// 🔄 RENDER CENTRAL (TODO pasa por aquí)
 function render() {
+  // PLAYER
   if (state.loadingPlayer) {
     renderSkeleton(playerCardEl);
   } else if (state.player) {
     renderPokemon(state.player, playerCardEl);
   }
 
+  // OPPONENT
   if (state.loadingOpponent) {
     renderSkeleton(opponentCardEl);
   } else if (state.errorOpponent) {
@@ -41,21 +43,22 @@ function render() {
     renderPokemon(state.opponent, opponentCardEl);
   }
 
+  // BOTÓN
   battleBtn.disabled = !(state.player && state.opponent);
 }
 
-// Load player
+// 🔥 CARGAR POKÉMON DEL PLAYER
 async function loadPlayerPokemon() {
   try {
     state.loadingPlayer = true;
     render();
 
     const data = await fetchPokemon(TRAINER.favoritePokemon);
-    await delay(600);
+    await delay(600); // efecto visual
 
     state.player = data;
 
-  } catch {
+  } catch (error) {
     playerCardEl.innerHTML = `<p>Error cargando tu Pokémon</p>`;
   } finally {
     state.loadingPlayer = false;
@@ -63,11 +66,12 @@ async function loadPlayerPokemon() {
   }
 }
 
-// Search opponent
+// 🔎 BUSCAR OPONENTE
 async function searchOpponent(name) {
   if (!name) return;
 
   try {
+    // Cancelar búsqueda anterior
     if (controller) controller.abort();
     controller = new AbortController();
 
@@ -80,6 +84,7 @@ async function searchOpponent(name) {
 
     state.opponent = data;
 
+    // Guardar en localStorage
     localStorage.setItem("lastOpponent", name);
 
   } catch (error) {
@@ -94,18 +99,18 @@ async function searchOpponent(name) {
   }
 }
 
-// Debounce
+// ⏱️ DEBOUNCE (400ms)
 let debounceTimeout;
 
 searchInput.addEventListener("input", (e) => {
   clearTimeout(debounceTimeout);
 
   debounceTimeout = setTimeout(() => {
-    searchOpponent(e.target.value.trim());
+    searchOpponent(e.target.value.trim().toLowerCase());
   }, 400);
 });
 
-// Cargar último oponente
+// 🔁 CARGAR ÚLTIMO OPONENTE
 function loadLastOpponent() {
   const last = localStorage.getItem("lastOpponent");
 
@@ -115,7 +120,7 @@ function loadLastOpponent() {
   }
 }
 
-// Botón
+// ⚔️ BOTÓN IR A BATALLA
 battleBtn.addEventListener("click", () => {
   localStorage.setItem("playerPokemon", JSON.stringify(state.player));
   localStorage.setItem("opponentPokemon", JSON.stringify(state.opponent));
@@ -123,6 +128,6 @@ battleBtn.addEventListener("click", () => {
   window.location.href = "../stage-2/index.html";
 });
 
-// Init
+// 🚀 INIT
 loadPlayerPokemon();
 loadLastOpponent();
