@@ -1,8 +1,5 @@
-/* ========================= */
-/* COMMIT 1 – BÁSICO */
-/* ========================= */
 
-/* Reset */
+/*Reset*/
 * {
     margin: 0;
     padding: 0;
@@ -10,13 +7,12 @@
     font-family: Arial, sans-serif;
 }
 
-/* Fondo */
 body {
     background: #0f172a;
     color: white;
 }
 
-/* Contenedor principal */
+/*Contenedor principal*/
 .container {
     max-width: 1100px;
     margin: auto;
@@ -24,11 +20,8 @@ body {
     text-align: center;
 }
 
-/* ========================= */
-/* COMMIT 2 – MEDIO */
-/* ========================= */
 
-/* TRAINER */
+/*Trainer*/
 .trainer-card {
     background: #1e293b;
     padding: 15px;
@@ -42,14 +35,13 @@ body {
     margin: 5px 0;
 }
 
-/* Contenedor vertical layout + botón */
+/*Layout Battle*/
 .battle-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* LAYOUT */
 .battle-layout {
     display: flex;
     align-items: stretch;
@@ -57,51 +49,43 @@ body {
     gap: 20px;
     margin-top: 30px;
     width: 100%;
-    max-width: 900px; /* ancho máximo para layout */
+    max-width: 900px;
 }
 
-/* Columnas */
 .pokemon {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-
     border: 2px solid #3a69af;
     border-radius: 12px;
     padding: 15px;
     background: #15294b;
 }
 
-/* VS */
 .vs {
     font-size: 60px;
     font-weight: bold;
     color: #ebe707;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 100px;
 }
 
-/* TARJETAS */
+/*Tarjetas pokemon*/
 .pokemon-card {
     background: #1e293b;
     padding: 20px;
     border-radius: 10px;
     border: 2px solid #3a69af;
-
     min-height: 250px;
-
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-/* Imagen */
 .pokemon-sprite {
     width: 130px;
     height: 130px;
@@ -109,26 +93,19 @@ body {
     margin-bottom: 10px;
 }
 
-/* Nombre */
 .pokemon-card p strong {
     font-size: 18px;
 }
 
-/* ========================= */
-/* COMMIT 3 – AVANZADO */
-/* ========================= */
-
-/* STATS EN UNA SOLA LÍNEA */
+/*Stats*/
 .pokemon-stats {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 15px;
-
     margin-top: 12px;
     font-weight: bold;
     font-size: 14px;
-
     flex-wrap: nowrap;
 }
 
@@ -136,16 +113,14 @@ body {
     display: flex;
     align-items: center;
     gap: 4px;
-
     white-space: nowrap;
-
     background: #0f172a;
     padding: 5px 8px;
     border-radius: 6px;
     border: 1px solid #3a69af;
 }
 
-/* INPUT */
+/*Input*/
 input {
     margin: 10px 0;
     padding: 10px;
@@ -161,10 +136,10 @@ input::placeholder {
     color: #8fa9d1;
 }
 
-/* BOTÓN CENTRADO EXACTO */
+/*Boton principal*/
 .battle-action {
     width: 100%;
-    max-width: 900px; /* mismo ancho que battle-layout */
+    max-width: 900px;
     margin-top: 25px;
     display: flex;
     justify-content: center;
@@ -192,10 +167,45 @@ button:disabled {
     cursor: not-allowed;
 }
 
-/* LOADING */
+/*Loading*/
 .loading {
     color: #94a3b8;
     font-style: italic;
     text-align: center;
     margin-top: 50px;
 }
+
+/*Moves*/
+.moves-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.move-btn {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.move-btn:hover {
+    transform: scale(1.05);
+}
+
+/*Colores por tipo*/
+.move-btn.electric { background-color: #f1d93b; color: #000; }
+.move-btn.water { background-color: #4ab6ef; }
+.move-btn.fire { background-color: #f75c03; }
+.move-btn.grass { background-color: #56c02b; }
+.move-btn.psychic { background-color: #d857f3; }
+.move-btn.dragon { background-color: #6a5cff; }
+.move-btn.ghost { background-color: #7b4da0; }
+.move-btn.normal { background-color: #a8a878; }
+.move-btn.unknown { background-color: #555; }
