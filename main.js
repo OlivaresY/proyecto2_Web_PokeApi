@@ -2,22 +2,24 @@
 
 import TRAINER from "../trainer.config.js";
 
-
-//Datos del entrenador
-
+// =========================
+// DATOS DEL ENTRENADOR
+// =========================
 document.getElementById("trainer-name").textContent = TRAINER.name;
 document.getElementById("trainer-town").textContent = TRAINER.hometown;
 document.getElementById("trainer-phrase").textContent = TRAINER.catchphrase;
 
-
-//Elementos del DOM
+// =========================
+// ELEMENTOS DEL DOM
+// =========================
 const playerCardEl = document.getElementById("player-card");
 const opponentCardEl = document.getElementById("opponent-card");
 const searchInput = document.getElementById("search");
 const battleBtn = document.getElementById("battle-btn");
 
-
-//Emojis y funciones
+// =========================
+// EMOJIS Y FUNCIONES AUXILIARES
+// =========================
 function typeEmoji(type) {
   const emojis = {
     electric: "⚡",
@@ -34,7 +36,38 @@ function typeEmoji(type) {
 
 function heartEmoji() { return "❤️"; }
 
-//Renderiozado de pokemon
+// =========================
+// MAPA DE COLORES POR TIPO (Paso 3)
+const typeColors = {
+  electric: "#f9f871",
+  water: "#3dc4f3",
+  fire: "#f76c6c",
+  grass: "#4cd964",
+  psychic: "#c07efb",
+  dragon: "#f9933b",
+  ghost: "#a179c7",
+  normal: "#dcdcdc",
+};
+
+// Aplica el tema al lado del jugador
+function applyTypeTheme(type) {
+  const color = typeColors[type] || "#ffffff";
+  const playerSection = document.querySelector(".pokemon.player");
+  playerSection.style.borderColor = color;
+  playerSection.style.backgroundColor = hexToAlpha(color, 0.2); // ligero fondo
+}
+
+// Convierte HEX a rgba con opacidad
+function hexToAlpha(hex, alpha) {
+  const r = parseInt(hex.substring(1, 3), 16);
+  const g = parseInt(hex.substring(3, 5), 16);
+  const b = parseInt(hex.substring(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+// =========================
+// RENDERIZADO DE POKÉMON
+// =========================
 function renderPokemonInfo(data, container, isPlayer = false) {
   const name = data.name.charAt(0).toUpperCase() + data.name.slice(1);
   const type = data.types[0].type.name;
@@ -57,10 +90,13 @@ function renderPokemonInfo(data, container, isPlayer = false) {
   `;
 
   if (isPlayer) {
+    applyTypeTheme(type); // <--- aplica tema al jugador
   }
 }
 
-//Carga del pokemon favorito
+// =========================
+// CARGA DEL POKÉMON FAVORITO
+// =========================
 async function loadPlayerPokemon() {
   try {
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${TRAINER.favoritePokemon.toLowerCase()}`);
@@ -73,11 +109,14 @@ async function loadPlayerPokemon() {
   }
 }
 
-
-// Estado del oponente
+// =========================
+// ESTADO DEL OPONENTE
+// =========================
 let opponentData = null;
 
-// Busqueda del oponente
+// =========================
+// BÚSQUEDA DEL OPONENTE
+// =========================
 async function searchOpponent(name) {
   if (!name) {
     opponentCardEl.innerHTML = `<p class="loading">Sin seleccionar</p>`;
@@ -100,8 +139,9 @@ async function searchOpponent(name) {
   }
 }
 
-
-//DEBOUNCE pra la busqueda
+// =========================
+// DEBOUNCE PARA LA BÚSQUEDA
+// =========================
 let debounceTimeout;
 searchInput.addEventListener("input", (e) => {
   clearTimeout(debounceTimeout);
@@ -111,23 +151,27 @@ searchInput.addEventListener("input", (e) => {
   }, 400);
 });
 
-//Precargar ultimo oponente
+// =========================
+// PRECARGAR ÚLTIMO OPONENTE
+// =========================
 const lastOpponent = localStorage.getItem("lastOpponent");
 if (lastOpponent) {
   searchInput.value = lastOpponent;
   searchOpponent(lastOpponent);
 }
 
-//Boton de batalla
+// =========================
+// BOTÓN DE BATALLA
+// =========================
 battleBtn.addEventListener("click", () => {
   if (!opponentData) return;
-  // Guardar datos para Stage 2
   localStorage.setItem("playerPokemon", JSON.stringify(TRAINER.favoritePokemon));
   localStorage.setItem("opponentPokemon", JSON.stringify(opponentData.name));
   localStorage.setItem("lastOpponent", opponentData.name);
-  // Redirigir a Stage 2
   window.location.href = "../stage-2/index.html";
 });
 
-//Inicializa pokemon del jugador
+// =========================
+// INICIALIZA POKÉMON DEL JUGADOR
+// =========================
 loadPlayerPokemon();
