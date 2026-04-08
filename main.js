@@ -97,7 +97,10 @@ function renderPokemonInfo(data, container, isPlayer = false) {
 //Cargar Pokemon jugador
 async function loadPlayerPokemon() {
   try {
-    renderSkeleton(playerCardEl); // 👈 skeleton
+    renderSkeleton(playerCardEl);
+
+    // 🔥 delay para ver skeleton
+    await new Promise(res => setTimeout(res, 800));
 
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${TRAINER.favoritePokemon}`);
     const data = await res.json();
@@ -113,7 +116,10 @@ async function searchOpponent(name) {
   if (!name) return;
 
   try {
-    renderSkeleton(opponentCardEl); // 👈 skeleton
+    renderSkeleton(opponentCardEl);
+
+    // 🔥 delay para ver skeleton
+    await new Promise(res => setTimeout(res, 800));
 
     const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
     const data = await res.json();

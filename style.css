@@ -169,3 +169,35 @@ button:disabled {
     display: flex;
     justify-content: center;
 }
+
+/* 🔥 SKELETON (AGREGADO) */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        #1e293b 25%,
+        #334155 50%,
+        #1e293b 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 8px;
+}
+
+/* Animación */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Variantes */
+.skeleton-img {
+    width: 130px;
+    height: 130px;
+    margin-bottom: 10px;
+}
+
+.skeleton-text {
+    height: 15px;
+    width: 80%;
+    margin: 6px auto;
+}
