@@ -227,3 +227,28 @@ input {
     width: 80%;
     margin: 6px auto;
 }
+
+/* 🔥 BOTÓN DE ATAQUE DEFINITIVO */
+.def-move-btn {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+
+    background: #1e293b;
+    border: 2px solid red;
+
+    color: red;
+    font-weight: bold;
+    text-transform: uppercase;
+
+    transition: 0.3s;
+    
+}
+
+/* Hover efecto poderoso */
+.def-move-btn:hover {
+    background: red;
+    color: white;
+    transform: scale(1.05);
+}

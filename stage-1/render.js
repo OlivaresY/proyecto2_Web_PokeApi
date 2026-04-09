@@ -1,6 +1,9 @@
 import TRAINER from "../trainer.config.js";
 import { getValidMoves, fetchMovesDetails } from "./api.js";
 
+// 🔥 CONTROL DE RENDER (ANTI BUG)
+let renderId = 0;
+
 // Emojis por tipo
 const typeEmoji = (type) => ({
   electric: "⚡",
@@ -54,8 +57,10 @@ export function renderSkeleton(container) {
   `;
 }
 
-// Render Pokémon completo
+// 🔥 RENDER FINAL SEGURO
 export async function renderPokemon(data, container) {
+  const currentRender = ++renderId;
+
   const type = data.types[0].type.name;
 
   const hp = data.stats.find(s => s.stat.name === "hp").base_stat;
@@ -66,7 +71,7 @@ export async function renderPokemon(data, container) {
   container.classList.add("dynamic-bg");
   container.style.backgroundColor = typeColor(type);
 
-  // HTML base
+  // Render base inmediato
   container.innerHTML = `
     <img src="${data.sprites.front_default}" class="pokemon-sprite">
     <p><strong>${data.name} ${typeEmoji(type)}</strong></p>
@@ -80,7 +85,9 @@ export async function renderPokemon(data, container) {
 
     ${
       container.id === "player-card"
-        ? `<p class="def-move">💥 ${TRAINER.definitiveMoveName}</p>`
+        ? `<button class="def-move-btn">
+            ${TRAINER.definitiveMoveName}
+          </button>`
         : ""
     }
 
@@ -89,10 +96,14 @@ export async function renderPokemon(data, container) {
 
   const movesContainer = container.querySelector(".moves-buttons");
 
+  // 🔥 obtener movimientos
   const validMoves = getValidMoves(data);
   const results = await fetchMovesDetails(validMoves);
 
-  // Siempre 4 botones
+  // 🔥 CANCELAR si ya hay un render más nuevo
+  if (currentRender !== renderId) return;
+
+  // 🔥 SIEMPRE 4 botones
   for (let i = 0; i < 4; i++) {
     const btn = document.createElement("button");
     btn.className = "move-btn";
