@@ -1,12 +1,27 @@
 /* Reset y básicos */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-body { background: #0f172a; color: white; }
-.container { max-width: 1100px; margin: auto; padding: 20px; text-align: center; }
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: Arial, sans-serif; 
+}
+
+body { 
+    background: #0f172a; 
+    color: white; 
+}
+
+.container { 
+    max-width: 1100px; 
+    margin: auto; 
+    padding: 20px; 
+    text-align: center; 
+}
 
 /* 🚩 CENTRADO PERFECTO DE LA BATALLA */
 .battle-layout {
     display: flex;
-    align-items: center; /* Centra verticalmente el VS con las tarjetas */
+    align-items: center; 
     justify-content: center;
     gap: 30px;
     margin: 30px auto;
@@ -58,28 +73,91 @@ body { background: #0f172a; color: white; }
     transition: background-color 0.3s ease;
 }
 
-.pokemon-sprite { width: 130px; height: 130px; object-fit: contain; margin-bottom: 10px; }
-.pokemon-stats { display: flex; justify-content: center; gap: 15px; margin-top: 12px; font-weight: bold; }
-.pokemon-stats span { background: #0f172a; padding: 5px 8px; border-radius: 6px; border: 1px solid #3a69af; }
+.pokemon-sprite { 
+    width: 130px; 
+    height: 130px; 
+    object-fit: contain; 
+    margin-bottom: 10px; 
+}
+
+.pokemon-stats { 
+    display: flex; 
+    justify-content: center; 
+    gap: 15px; 
+    margin-top: 12px; 
+    font-weight: bold; 
+}
+
+.pokemon-stats span { 
+    background: #0f172a; 
+    padding: 5px 8px; 
+    border-radius: 6px; 
+    border: 1px solid #3a69af; 
+}
 
 /* Buscador e inputs */
-input { margin: 10px 0; padding: 10px; width: 100%; border-radius: 8px; border: 2px solid #3a69af; background-color: #15294b; color: white; }
-.moves-buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 15px; width: 100%; }
+input { 
+    margin: 10px 0; 
+    padding: 10px; 
+    width: 100%; 
+    border-radius: 8px; 
+    border: 2px solid #3a69af; 
+    background-color: #15294b; 
+    color: white; 
+}
+
+.moves-buttons { 
+    display: flex; 
+    flex-wrap: wrap; 
+    gap: 8px; 
+    justify-content: center; 
+    margin-top: 15px; 
+    width: 100%; 
+}
 
 .move-btn {
-    padding: 10px; border-radius: 10px; background: #f2d33b; color: #000;
-    border: 2px solid #000; flex: 1 1 calc(45% - 10px); font-weight: bold; transition: all 0.3s ease;
+    padding: 10px; 
+    border-radius: 10px; 
+    background: #f2d33b; 
+    color: #000;
+    border: 2px solid #000; 
+    flex: 1 1 calc(45% - 10px); 
+    font-weight: bold; 
+    transition: all 0.3s ease;
 }
-#player-card .move-btn:hover { cursor: pointer; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(242, 211, 59, 0.5); }
+
+#player-card .move-btn:hover { 
+    cursor: pointer; 
+    transform: translateY(-5px); 
+    box-shadow: 0 5px 15px rgba(242, 211, 59, 0.5); 
+}
 
 .def-move-btn {
-    margin-top: 10px; padding: 12px; width: 100%; border-radius: 10px;
-    background: #1e293b; border: 2px solid red; color: red; font-weight: bold; text-transform: uppercase; transition: all 0.3s ease;
+    margin-top: 10px; 
+    padding: 12px; 
+    width: 100%; 
+    border-radius: 10px;
+    background: #1e293b; 
+    border: 2px solid red; 
+    color: red; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    transition: all 0.3s ease;
 }
-#player-card .def-move-btn:hover { cursor: pointer; background: red; color: white; transform: translateY(-5px); }
+
+#player-card .def-move-btn:hover { 
+    cursor: pointer; 
+    background: red; 
+    color: white; 
+    transform: translateY(-5px); 
+}
 
 /* 🚩 BOTÓN IR A BATALLA CON GRIETAS PROFUNDAS */
-.battle-action { margin-top: 25px; display: flex; justify-content: center; }
+.battle-action { 
+    margin-top: 25px; 
+    display: flex; 
+    justify-content: center; 
+}
 
 #battle-btn {
     background: #ffcb05;
@@ -101,40 +179,39 @@ input { margin: 10px 0; padding: 10px; width: 100%; border-radius: 8px; border: 
     transition: all 0.1s ease;
 }
 
-#battle-btn:hover:not(:disabled) { background: #f2d33b; transform: translateY(-2px); box-shadow: inset 0 0 25px rgba(0,0,0,0.5), 0 10px 0 #2a3a9a; }
-#battle-btn:active:not(:disabled) { transform: translateY(6px); box-shadow: inset 0 0 35px rgba(0,0,0,0.7), 0 2px 0 #2a3a9a; }
-#battle-btn:disabled { background: #4b5563; color: #9ca3af; clip-path: none; cursor: not-allowed; border-radius: 8px; box-shadow: none; }
+#battle-btn:hover:not(:disabled) { 
+    background: #f2d33b; 
+    transform: translateY(-2px); 
+    box-shadow: inset 0 0 25px rgba(0,0,0,0.5), 0 10px 0 #2a3a9a; 
+}
+
+#battle-btn:active:not(:disabled) { 
+    transform: translateY(6px); 
+    box-shadow: inset 0 0 35px rgba(0,0,0,0.7), 0 2px 0 #2a3a9a; 
+}
+
+#battle-btn:disabled { 
+    background: #4b5563; 
+    color: #9ca3af; 
+    clip-path: none; 
+    cursor: not-allowed; 
+    border-radius: 8px; 
+    box-shadow: none; 
+}
 
 /* Estados de texto */
-.empty-state, .error-state { display: flex; justify-content: center; align-items: center; text-align: center; height: 100%; }
+.empty-state, .error-state { 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    text-align: center; 
+    height: 100%; 
+}
+
 .who-is {
-    font-family: "Arial Black", sans-serif; font-weight: 900; font-style: italic; font-size: 2.2rem; color: #ffcb05;
-    text-shadow: -3px -3px 0 #3b4cca, 3px -3px 0 #3b4cca, -3px 3px 0 #3b4cca, 3px 3px 0 #3b4cca;
-}
-
-/* Skeletons */
-.skeleton { background: #1e293b linear-gradient(90deg, transparent 25%, rgba(255, 255, 255, 0.05) 50%, transparent 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; }
-@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-.skeleton-img { width: 130px; height: 130px; border-radius: 8px; margin-bottom: 15px; }
-.skeleton-text { width: 80%; height: 20px; border-radius: 4px; margin-bottom: 10px; }
-
-/* 🚩 TARJETA ENTRENADOR Y OPONENTE: Alineación vertical */
-.trainer-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.trainer-card h1, .trainer-card h2 {
-    margin-bottom: 10px;
-}
-
-.trainer-card p {
-    display: flex;
-    align-items: center; /* Centra emoji y texto */
-    gap: 6px;            /* Espacio entre emoji y texto */
-}
+    font-family: "Arial Black", sans-serif; 
+    font-weight: 900; 
+    font-style: italic; 
+    font-size: 2.2rem; 
+    color: #ffcb05;
+    text-shadow: -3px -3px 0 #3b4cca

@@ -7,6 +7,10 @@ const opponentCardEl = document.getElementById("opponent-card");
 const searchInput = document.getElementById("search");
 const battleBtn = document.getElementById("battle-btn");
 
+const oppName = document.getElementById("opponent-name");
+const oppTown = document.getElementById("opponent-town");
+const oppPhrase = document.getElementById("opponent-phrase");
+
 const state = { player: null, opponent: null, loadingPlayer: false, loadingOpponent: false, playerRendered: false };
 let abortController = null;
 
@@ -20,13 +24,17 @@ function render() {
     if (state.loadingOpponent) renderSkeleton(opponentCardEl);
     else if (state.opponent) renderPokemon(state.opponent, opponentCardEl);
 
-    battleBtn.disabled = !(state.player && state.opponent);
+    battleBtn.disabled = !(state.player && state.opponent && !state.loadingOpponent);
 }
 
 async function init() {
     document.getElementById("trainer-name").textContent = `🎒 ${TRAINER.name}`;
     document.getElementById("trainer-town").textContent = `🌳 ${TRAINER.hometown}`;
     document.getElementById("trainer-phrase").textContent = `💬 ${TRAINER.catchphrase}`;
+
+    if(oppName) oppName.textContent = "🎒 DESCONOCIDO";
+    if(oppTown) oppTown.textContent = "🌳 DESCONOCIDO";
+    if(oppPhrase) oppPhrase.textContent = "💬 DESCONOCIDO";
 
     state.loadingPlayer = true;
     render();
@@ -36,7 +44,7 @@ async function init() {
         const moves = getValidMoves(data);
         const moveDetails = await fetchMovesDetails(moves);
         state.player = { ...data, movesInfo: moveDetails };
-    } catch (e) { console.error("Error inicial:", e); }
+    } catch (e) { console.error(e); }
     finally {
         state.loadingPlayer = false;
         render();
@@ -57,14 +65,19 @@ searchInput.addEventListener("input", (e) => {
 
     if (!val) {
         state.opponent = null;
+        state.loadingOpponent = false; // Reset inmediato
         opponentCardEl.style.backgroundColor = '';
         opponentCardEl.innerHTML = `<div class="empty-state"><p>Busca un Pokémon...</p></div>`;
+        if(oppName) oppName.textContent = "🎒 DESCONOCIDO";
+        if(oppTown) oppTown.textContent = "🌳 DESCONOCIDO";
+        if(oppPhrase) oppPhrase.textContent = "💬 DESCONOCIDO";
         battleBtn.disabled = true;
         return;
     }
 
     state.loadingOpponent = true;
     renderSkeleton(opponentCardEl);
+    battleBtn.disabled = true; // Bloqueo mientras busca
 
     debounce = setTimeout(async () => {
         try {
@@ -72,6 +85,7 @@ searchInput.addEventListener("input", (e) => {
             const moves = getValidMoves(data);
             const moveDetails = await fetchMovesDetails(moves, abortController.signal);
             state.opponent = { ...data, movesInfo: moveDetails };
+            
             state.loadingOpponent = false;
             localStorage.setItem("lastOpponent", val);
             render();
@@ -83,7 +97,7 @@ searchInput.addEventListener("input", (e) => {
             opponentCardEl.innerHTML = `<div class="error-state"><p class="who-is">¿Quién es ese Pokémon?</p></div>`;
             battleBtn.disabled = true;
         }
-    }, 400);
+    }, 800); 
 });
 
 battleBtn.addEventListener("click", () => {
