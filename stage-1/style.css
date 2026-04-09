@@ -1,254 +1,109 @@
 /* Reset y básicos */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+body { background: #0f172a; color: white; }
+.container { max-width: 1100px; margin: auto; padding: 20px; text-align: center; }
 
-body {
-    background: #0f172a;
-    color: white;
-}
-
-/* Contenedor principal */
-.container {
-    max-width: 1100px;
-    margin: auto;
-    padding: 20px;
-    text-align: center;
-}
-
-/* Trainer */
-.trainer-card {
-    background: #1e293b;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border: 2px solid #3a69af;
-    text-align: left;
-}
-
-.trainer-card p {
-    margin: 5px 0;
-}
-
-/* Layout Battle */
+/* 🚩 CENTRADO PERFECTO DE LA BATALLA */
 .battle-layout {
     display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-    gap: 20px;
+    align-items: center; /* Centra verticalmente el VS con las tarjetas */
+    justify-content: center;
+    gap: 30px;
     margin: 30px auto;
     width: 100%;
-    max-width: 900px;
 }
 
 .pokemon {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    width: 420px;
+    flex-shrink: 0;
     border: 2px solid #3a69af;
     border-radius: 12px;
     padding: 15px;
     background: #15294b;
 }
 
-/* VS centrado con brillo */
+/* 🚩 VS CON CENTRADO Y GRIETAS */
 .vs {
-    font-size: 60px;
-    font-weight: bold;
-    color: #ebe707;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex: 0 0 100px; /* ancho fijo para centrar */
+    font-family: "Arial Black", sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 4.5rem;
+    color: #ffcb05;
+    text-shadow: 
+        -4px -4px 0 #3b4cca, 
+         4px -4px 0 #3b4cca, 
+        -4px  4px 0 #3b4cca, 
+         4px  4px 0 #3b4cca;
+    /* Efecto agrietado sutil en el VS */
+    clip-path: polygon(5% 15%, 15% 5%, 40% 15%, 60% 5%, 85% 15%, 100% 10%, 95% 85%, 75% 95%, 50% 85%, 25% 95%, 5% 80%);
+    min-width: 120px;
     text-align: center;
-    position: relative;
-    overflow: hidden;
 }
 
-.vs span, #battle-btn span {
-    position: relative;
-    display: inline-block;
-}
-
-.vs span::before,
-#battle-btn span::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(
-        120deg,
-        rgba(255,255,255,0) 0%,
-        rgba(255,255,255,0.5) 50%,
-        rgba(255,255,255,0) 100%
-    );
-    animation: shine 2s linear infinite;
-    pointer-events: none;
-}
-
-@keyframes shine {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(200%); }
-}
-
-/* Tarjetas pokemon */
 .pokemon-card {
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 10px;
-    border: 2px solid #3a69af;
-    min-height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Fondo dinámico */
-.pokemon-card.dynamic-bg {
+    background: #1e293b; padding: 20px; border-radius: 10px; border: 2px solid #3a69af;
+    min-height: 440px; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%;
     transition: background-color 0.3s ease;
 }
 
-.pokemon-sprite {
-    width: 130px;
-    height: 130px;
-    object-fit: contain;
-    margin-bottom: 10px;
-}
+.pokemon-sprite { width: 130px; height: 130px; object-fit: contain; margin-bottom: 10px; }
+.pokemon-stats { display: flex; justify-content: center; gap: 15px; margin-top: 12px; font-weight: bold; }
+.pokemon-stats span { background: #0f172a; padding: 5px 8px; border-radius: 6px; border: 1px solid #3a69af; }
 
-/* Stats */
-.pokemon-stats {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 12px;
-    font-weight: bold;
-    font-size: 14px;
-}
-
-.pokemon-stats span {
-    background: #0f172a;
-    padding: 5px 8px;
-    border-radius: 6px;
-    border: 1px solid #3a69af;
-}
-
-/* Input */
-input {
-    margin: 10px 0;
-    padding: 10px;
-    width: 80%;
-    border-radius: 8px;
-    border: 2px solid #3a69af;
-    background-color: #15294b;
-    color: white;
-}
-
-/* Botón */
-#battle-btn {
-    padding: 15px 30px;
-    font-size: 18px;
-    border-radius: 10px;
-    background: #f2d33b;
-    color: #ffffff;
-    font-weight: bold;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-}
-
-#battle-btn:disabled {
-    background: gray;
-    cursor: not-allowed;
-}
-
-/* Moves */
-.moves-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin-top: 15px;
-}
+/* Buscador e inputs */
+input { margin: 10px 0; padding: 10px; width: 100%; border-radius: 8px; border: 2px solid #3a69af; background-color: #15294b; color: white; }
+.moves-buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 15px; width: 100%; }
 
 .move-btn {
-    padding: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    color: white;
-    background: #f2d33b;
-    border: 2px solid #000;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    flex: 1 1 calc(45% - 10px);
-    min-width: 80px;
+    padding: 10px; border-radius: 10px; background: #f2d33b; color: #000;
+    border: 2px solid #000; flex: 1 1 calc(45% - 10px); font-weight: bold; transition: all 0.3s ease;
 }
+#player-card .move-btn:hover { cursor: pointer; transform: translateY(-5px); box-shadow: 0 5px 15px rgba(242, 211, 59, 0.5); }
 
-/* Botón centrado */
-.battle-action {
-    width: 100%;
-    max-width: 900px;
-    margin: 25px auto;
-    display: flex;
-    justify-content: center;
-}
-
-/* Skeleton */
-.skeleton {
-    background: linear-gradient(
-        90deg,
-        #1e293b 25%,
-        #334155 50%,
-        #1e293b 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 8px;
-}
-
-@keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
-
-.skeleton-img {
-    width: 130px;
-    height: 130px;
-    margin-bottom: 10px;
-}
-
-.skeleton-text {
-    height: 15px;
-    width: 80%;
-    margin: 6px auto;
-}
-
-/* 🔥 BOTÓN DE ATAQUE DEFINITIVO */
 .def-move-btn {
-    margin-top: 15px;
-    padding: 12px;
-    border-radius: 10px;
+    margin-top: 10px; padding: 12px; width: 100%; border-radius: 10px;
+    background: #1e293b; border: 2px solid red; color: red; font-weight: bold; text-transform: uppercase; transition: all 0.3s ease;
+}
+#player-card .def-move-btn:hover { cursor: pointer; background: red; color: white; transform: translateY(-5px); }
+
+/* 🚩 BOTÓN IR A BATALLA CON GRIETAS PROFUNDAS */
+.battle-action { margin-top: 25px; display: flex; justify-content: center; }
+
+#battle-btn {
+    background: #ffcb05;
+    color: #000;
+    font-family: "Arial Black", sans-serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 2rem;
+    padding: 22px 60px;
     cursor: pointer;
-
-    background: #1e293b;
-    border: 2px solid red;
-
-    color: red;
-    font-weight: bold;
-    text-transform: uppercase;
-
-    transition: 0.3s;
-    
+    border: none;
+    /* Grietas extremas */
+    clip-path: polygon(
+        0% 20%, 10% 0%, 25% 15%, 40% 0%, 55% 20%, 70% 5%, 85% 20%, 100% 5%, 
+        98% 80%, 85% 100%, 70% 85%, 55% 100%, 40% 80%, 25% 95%, 10% 80%, 0% 95%
+    );
+    /* Sombra de relieve y grietas internas */
+    box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.4),
+        0 8px 0 #2a3a9a; 
+    transition: all 0.1s ease;
 }
 
-/* Hover efecto poderoso */
-.def-move-btn:hover {
-    background: red;
-    color: white;
-    transform: scale(1.05);
+#battle-btn:hover:not(:disabled) { background: #f2d33b; transform: translateY(-2px); box-shadow: inset 0 0 25px rgba(0,0,0,0.5), 0 10px 0 #2a3a9a; }
+#battle-btn:active:not(:disabled) { transform: translateY(6px); box-shadow: inset 0 0 35px rgba(0,0,0,0.7), 0 2px 0 #2a3a9a; }
+#battle-btn:disabled { background: #4b5563; color: #9ca3af; clip-path: none; cursor: not-allowed; border-radius: 8px; box-shadow: none; }
+
+/* Estados de texto */
+.empty-state, .error-state { display: flex; justify-content: center; align-items: center; text-align: center; height: 100%; }
+.who-is {
+    font-family: "Arial Black", sans-serif; font-weight: 900; font-style: italic; font-size: 2.2rem; color: #ffcb05;
+    text-shadow: -3px -3px 0 #3b4cca, 3px -3px 0 #3b4cca, -3px 3px 0 #3b4cca, 3px 3px 0 #3b4cca;
 }
+
+/* Skeletons */
+.skeleton { background: #1e293b linear-gradient(90deg, transparent 25%, rgba(255, 255, 255, 0.05) 50%, transparent 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite linear; }
+@keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+.skeleton-img { width: 130px; height: 130px; border-radius: 8px; margin-bottom: 15px; }
+.skeleton-text { width: 80%; height: 20px; border-radius: 4px; margin-bottom: 10px; }
