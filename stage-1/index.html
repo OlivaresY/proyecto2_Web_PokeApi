@@ -8,67 +8,44 @@
 <body>
 
 <main class="container">
-
     <div class="battle-layout">
-
-        <!--Jugador-->
         <section class="pokemon player">
-
-            <!-- Entrenador -->
             <div class="trainer-card">
                 <h1>Entrenador</h1>
-                <p id="trainer-name">Nombre</p>
-                <p id="trainer-town">Pueblo</p>
-                <p id="trainer-phrase">Frase</p>
+                <p id="trainer-name">Cargando...</p>
+                <p id="trainer-town">Cargando...</p>
+                <p id="trainer-phrase">Cargando...</p>
             </div>
 
             <h2>Tu Pokémon:</h2>
-
             <div class="pokemon-card dynamic-bg" id="player-card">
                 <p class="loading">Cargando tu Pokémon...</p>
-                <div class="moves-buttons"></div>
             </div>
-
         </section>
 
-        <!--VS-->
         <div class="vs"><span>VS</span></div>
 
-        <!--Oponente-->
         <section class="pokemon opponent">
-
             <div class="trainer-card">
                 <h2>Oponente</h2>
-                <p id="opponent-name">🎒 Desconocido</p>
-                <p id="opponent-town">🌳 Desconocido</p>
-                <p id="opponent-phrase">💬 Desconocida</p>
+                <p id="opponent-name">Esperando...</p>
+                <p id="opponent-town">Esperando...</p>
+                <p id="opponent-phrase">Esperando...</p>
             </div>
 
-            <input 
-                type="text" 
-                id="search" 
-                placeholder="Buscar Pokémon..."
-            />
+            <input type="text" id="search" placeholder="Buscar Pokémon..." />
 
             <div class="pokemon-card dynamic-bg" id="opponent-card">
                 <p class="loading">Busca un Pokémon...</p>
-                <div class="moves-buttons"></div>
             </div>
-
         </section>
-
     </div>
 
-    <!--Boton centrado-->
     <div class="battle-action">
-        <button id="battle-btn" disabled>
-            Ir a batalla
-        </button>
+        <button id="battle-btn" disabled>Ir a batalla</button>
     </div>
-
 </main>
 
 <script type="module" src="./main.js"></script>
-
 </body>
 </html>
