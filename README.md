@@ -1,7 +1,7 @@
-# 🧩 Pokémon Battle — Vanilla JS Project
+# Pokémon Battle
 
 ## 🌐 Live Demo
-👉 (Agrega aquí tu GitHub Pages URL)
+👉 [https://github.com/OlivaresY/proyecto2_Web_PokeApi](https://github.com/OlivaresY/proyecto2_Web_PokeApi)
 
 ---
 
@@ -14,11 +14,9 @@ Elegí a **Golduck** porque siempre me ha llamado la atención su diseño y su c
 ## 💥 Movimiento Definitivo
 
 **Nombre:** Tsunami Final  
-**Descripción:**  
-Una ola gigante destruye todo a su paso, arrasando al oponente sin posibilidad de escape.
+**Descripción:** Una ola gigante destruye todo a su paso, arrasando al oponente sin posibilidad de escape.
 
-**Inspiración:**  
-Está inspirado en el poder del agua como fuerza imparable de la naturaleza, combinando el estilo agresivo de Golduck con un ataque visualmente impactante.
+**Inspiración:** Está inspirado en el poder del agua como fuerza imparable de la naturaleza, combinando el estilo agresivo de Golduck con un ataque visualmente impactante.
 
 ---
 
