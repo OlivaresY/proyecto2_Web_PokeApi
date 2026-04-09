@@ -2,45 +2,40 @@ import TRAINER from "../trainer.config.js";
 import { state, formulas, wait } from "./battle.js";
 import { render } from "./render.js";
 
-// --- INICIALIZACIÓN ---
+// --- 1. INICIALIZACIÓN ---
 async function init() {
     const data = JSON.parse(localStorage.getItem("battleData"));
 
-    // Si no hay datos, volvemos al inicio
     if (!data) {
         window.location.href = "../index.html";
         return;
     }
 
-    // 1. Cargar Pokémon en el estado
+    // Cargar datos y calcular vida (Requisito: base_stat * 2.5)
     state.player = data.player;
     state.opponent = data.opponent;
-
-    // 2. Calcular HP (Base HP * 2.5) según requisito 05
     state.playerMaxHP = Math.floor(state.player.stats.find(s => s.stat.name === "hp").base_stat * 2.5);
     state.opponentMaxHP = Math.floor(state.opponent.stats.find(s => s.stat.name === "hp").base_stat * 2.5);
-    
     state.playerHP = state.playerMaxHP;
     state.opponentHP = state.opponentMaxHP;
 
-    // 3. Configurar textos iniciales en el DOM
+    // Configurar UI inicial
     document.getElementById("p-name").textContent = state.player.name;
     document.getElementById("o-name").textContent = state.opponent.name;
     state.log.push(`¡Un ${state.opponent.name} salvaje apareció!`);
-    state.log.push(`${TRAINER.name} envía a ${state.player.name}!`);
 
-    // 4. Registrar Eventos de teclado (Se registra una sola vez)
+    // Eventos de control (Teclado y Clics)
     document.addEventListener('keydown', handleKeyDown);
+    document.getElementById("normal-moves").addEventListener('click', handlePlayerAttack);
+    document.getElementById("special-move-btn").addEventListener('click', handleSpecialAttack);
 
-    // 5. Primer renderizado y comienzo del bucle enemigo
     render(state);
     scheduleEnemyAttack();
 }
 
-// --- MOVIMIENTO ---
+// --- 2. MOVIMIENTO (Flechas) ---
 function handleKeyDown(e) {
-    if (state.phase !== 'fighting') return;
-    if (state.locked) return; // Bloqueo durante el impacto (Requisito 05)
+    if (state.phase !== 'fighting' || state.locked) return;
 
     if (e.key === "ArrowLeft" && state.playerPosition > 1) {
         state.playerPosition--;
@@ -51,68 +46,111 @@ function handleKeyDown(e) {
     }
 }
 
-// --- LÓGICA DEL ENEMIGO (Bucle Real-Time) ---
+// --- 3. ATAQUE DEL JUGADOR (Con Cooldown) ---
+function startCooldown(durationMs, btnElement) {
+    const start = performance.now();
+    state.attackOnCooldown = true;
+    render(state);
+
+    function tick(now) {
+        const elapsed = now - start;
+        const pct = Math.min(elapsed / durationMs, 1);
+        
+        // Crear o actualizar la barra de carga en el botón
+        let bar = btnElement.querySelector(".cooldown-overlay");
+        if (!bar) {
+            bar = document.createElement("div");
+            bar.className = "cooldown-overlay";
+            btnElement.appendChild(bar);
+        }
+        bar.style.width = `${(1 - pct) * 100}%`;
+
+        if (pct < 1 && state.phase === 'fighting') {
+            requestAnimationFrame(tick);
+        } else {
+            state.attackOnCooldown = false;
+            if (bar.parentNode) btnElement.removeChild(bar);
+            render(state);
+        }
+    }
+    requestAnimationFrame(tick);
+}
+
+function handlePlayerAttack(e) {
+    const btn = e.target.closest(".move-btn");
+    if (!btn || state.phase !== 'fighting' || state.attackOnCooldown) return;
+
+    const moveName = btn.dataset.moveName;
+    const power = parseInt(btn.dataset.power);
+    
+    const damage = formulas.playerAttack(power);
+    state.opponentHP = Math.max(0, state.opponentHP - damage);
+    
+    state.log.push(`¡${state.player.name} usó ${moveName.toUpperCase()}!`);
+    state.log.push(`Daño causado: ${damage}.`);
+
+    startCooldown(2500, btn); // 2.5 segundos de enfriamiento
+    checkBattleEnd();
+    render(state);
+}
+
+function handleSpecialAttack() {
+    if (state.phase !== 'fighting' || state.definitiveUsed || state.attackOnCooldown) return;
+
+    state.definitiveUsed = true;
+    state.opponentHP = 0; // KO Instantáneo (Requisito)
+    
+    state.log.push(`¡${TRAINER.definitiveMoveName.toUpperCase()}!`);
+    state.log.push(`${TRAINER.definitiveMoveFlavor}`);
+    
+    checkBattleEnd();
+    render(state);
+}
+
+// --- 4. IA ENEMIGA (Recursive setTimeout) ---
 function scheduleEnemyAttack() {
     if (state.phase !== 'fighting') return;
 
-    // Intervalo aleatorio entre 3 y 10 segundos
     const delay = (Math.random() * (10 - 3) + 3) * 1000;
-
     const timeout = setTimeout(async () => {
         await resolveEnemyAttack();
-        if (state.phase === 'fighting') scheduleEnemyAttack(); // Bucle recursivo
+        if (state.phase === 'fighting') scheduleEnemyAttack();
     }, delay);
 
     state.timers.push(timeout);
 }
 
 async function resolveEnemyAttack() {
-    // 1. Telegrafiar ataque (Elegir celda 1, 2 o 3)
     const targetCell = Math.floor(Math.random() * 3) + 1;
     state.incomingAttack = targetCell;
-    state.log.push(`${state.opponent.name} está cargando un ataque en la zona ${targetCell}...`);
     render(state);
 
-    // 2. Ventana de aviso (600ms para reaccionar)
-    await wait(600);
-
-    // 3. LOCK: El jugador ya no puede moverse
-    state.locked = true;
+    await wait(600); // Ventana de advertencia
+    state.locked = true; // Bloqueo de movimiento
     render(state);
 
-    // 4. Resolución del daño
     if (state.playerPosition === targetCell) {
-        const oppAttack = state.opponent.stats.find(s => s.stat.name === "attack").base_stat;
-        const damage = formulas.enemyAttack(oppAttack);
+        const attackStat = state.opponent.stats.find(s => s.stat.name === "attack").base_stat;
+        const damage = formulas.enemyAttack(attackStat);
         state.playerHP = Math.max(0, state.playerHP - damage);
-        state.log.push(`¡GOLPE DIRECTO! Recibes ${damage} de daño.`);
+        state.log.push(`¡${state.opponent.name} te ha golpeado! (-${damage})`);
     } else {
-        state.log.push(`¡Esquivaste el ataque con éxito!`);
+        state.log.push(`¡Esquivaste el ataque del oponente!`);
     }
 
-    // 5. Reset de fase de ataque
     state.incomingAttack = null;
     state.locked = false;
-    
     checkBattleEnd();
     render(state);
 }
 
+// --- 5. FIN DE JUEGO ---
 function checkBattleEnd() {
-    if (state.playerHP <= 0) {
+    if (state.playerHP <= 0 || state.opponentHP <= 0) {
         state.phase = 'ended';
-        state.log.push(TRAINER.loseMessage);
-    } else if (state.opponentHP <= 0) {
-        state.phase = 'ended';
-        state.log.push(TRAINER.winMessage);
-    }
-
-    if (state.phase === 'ended') {
-        // Limpiar todos los timers para evitar "orphaned timeouts"
         state.timers.forEach(t => clearTimeout(t));
         document.removeEventListener('keydown', handleKeyDown);
     }
 }
 
-// Iniciar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', init);
