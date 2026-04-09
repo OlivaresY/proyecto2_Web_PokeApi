@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pokémon Battle - Arena</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<main class="battle-container">
+    <header class="battle-header">
+        <div class="hp-section player-side">
+            <span id="p-name" class="name-label">TU POKÉMON</span>
+            <div class="hp-bar"><div id="player-hp-fill" class="hp-fill"></div></div>
+            <span id="player-hp-text">0/0</span>
+        </div>
+        
+        <div class="vs-mini">VS</div>
+
+        <div class="hp-section opponent-side">
+            <span id="o-name" class="name-label">OPONENTE</span>
+            <div class="hp-bar"><div id="opponent-hp-fill" class="hp-fill"></div></div>
+            <span id="opponent-hp-text">0/0</span>
+        </div>
+    </header>
+
+    <section class="arena">
+        <div class="grid" id="battle-grid">
+            <div class="cell" data-index="1"></div>
+            <div class="cell" data-index="2"></div>
+            <div class="cell" data-index="3"></div>
+            <div class="cell" data-index="4"></div>
+            <div class="cell" data-index="5"></div>
+            <div class="cell" data-index="6"></div>
+        </div>
+    </section>
+
+    <footer class="battle-controls">
+        <div class="moves-panel">
+            <div id="normal-moves" class="moves-grid"></div>
+            <button id="special-move-btn" class="special-btn">CARGANDO...</button>
+        </div>
+
+        <div class="log-panel">
+            <div class="log-title">HISTORIAL</div>
+            <div id="battle-log" class="log-content">
+                <p>Esperando inicio...</p>
+            </div>
+        </div>
+    </footer>
+</main>
+
+<script type="module" src="./main.js"></script>
+</body>
+</html>
