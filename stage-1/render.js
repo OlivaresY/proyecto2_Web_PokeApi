@@ -1,81 +1,81 @@
-import TRAINER from "../trainer.config.js";
-import { fetchPokemon } from "./api.js";
-import { renderPokemon, renderSkeleton } from "./render.js";
-
-const playerCardEl = document.getElementById("player-card");
-const opponentCardEl = document.getElementById("opponent-card");
-const searchInput = document.getElementById("search");
-const battleBtn = document.getElementById("battle-btn");
-
-const state = {
-  player: null,
-  opponent: null,
-  loadingPlayer: false,
-  loadingOpponent: false,
-  playerRendered: false 
+// Diccionario completo de los 18 tipos de Pokémon
+const TYPE_INFO = {
+    fire: { color: '#ff9c54', emoji: '🔥' },
+    water: { color: '#4d90d5', emoji: '💧' },
+    grass: { color: '#63bb5b', emoji: '🌿' },
+    electric: { color: '#f3d23b', emoji: '⚡' },
+    ice: { color: '#74ced9', emoji: '❄️' },
+    fighting: { color: '#ce4069', emoji: '🥊' },
+    poison: { color: '#ab6ac8', emoji: '🧪' },
+    ground: { color: '#d97746', emoji: '🏜️' },
+    flying: { color: '#8fa8dd', emoji: '🕊️' },
+    psychic: { color: '#f97176', emoji: '🔮' },
+    bug: { color: '#90c12c', emoji: '🐞' },
+    rock: { color: '#c7b78b', emoji: '🪨' },
+    ghost: { color: '#5269ac', emoji: '👻' },
+    dragon: { color: '#0a6dc4', emoji: '🐲' },
+    dark: { color: '#5a5366', emoji: '🌑' },
+    steel: { color: '#5a8ea1', emoji: '⚙️' },
+    fairy: { color: '#ec8fe6', emoji: '✨' },
+    normal: { color: '#9099a1', emoji: '🔘' }
 };
 
-function render() {
-  if (state.loadingPlayer) {
-    renderSkeleton(playerCardEl);
-  } else if (state.player && !state.playerRendered) {
-    renderPokemon(state.player, playerCardEl);
-    state.playerRendered = true; 
-  }
-
-  if (state.loadingOpponent) {
-    renderSkeleton(opponentCardEl);
-  } else if (state.opponent) {
-    renderPokemon(state.opponent, opponentCardEl);
-  }
-
-  battleBtn.disabled = !(state.player && state.opponent);
+export function renderSkeleton(container) {
+    container.style.backgroundColor = '#f0f0f0';
+    container.innerHTML = `
+        <div class="skeleton skeleton-img"></div>
+        <div class="skeleton skeleton-text"></div>
+        <div class="skeleton skeleton-text" style="width: 60%"></div>
+    `;
 }
 
-async function init() {
-  document.getElementById("trainer-name").textContent = `🎒 ${TRAINER.name}`;
-  document.getElementById("trainer-town").textContent = `🌳 ${TRAINER.hometown}`;
-  document.getElementById("trainer-phrase").textContent = `💬 ${TRAINER.catchphrase}`;
+export function renderPokemon(pokemon, container) {
+    const { name, sprites, stats, movesInfo, types } = pokemon;
+    const isPlayer = container.id === "player-card";
 
-  state.loadingPlayer = true;
-  render();
-  state.player = await fetchPokemon(TRAINER.favoritePokemon.toLowerCase());
-  state.loadingPlayer = false;
-  render();
-}
+    // Obtener info del tipo principal
+    const mainType = types[0].type.name;
+    const typeData = TYPE_INFO[mainType] || { color: '#9099a1', emoji: '❓' };
+    
+    // Aplicar fondo dinámico
+    container.style.backgroundColor = typeData.color;
 
-let debounce;
-searchInput.addEventListener("input", (e) => {
-  clearTimeout(debounce);
-  const val = e.target.value.trim().toLowerCase();
+    // Stats con tus emojis
+    const hp = stats.find(s => s.stat.name === "hp").base_stat;
+    const attack = stats.find(s => s.stat.name === "attack").base_stat;
+    const defense = stats.find(s => s.stat.name === "defense").base_stat;
+    const energy = stats.find(s => s.stat.name === "speed").base_stat;
 
-  if (!val) {
-    state.opponent = null;
-    state.loadingOpponent = false;
-    opponentCardEl.style.backgroundColor = ""; 
-    opponentCardEl.classList.remove("dynamic-bg");
-    opponentCardEl.innerHTML = `<div class="empty-state"><p>Busca un Pokémon...</p></div>`;
-    battleBtn.disabled = true;
-    return;
-  }
+    // Separar ataques (4 normales y 1 especial)
+    const normalMoves = movesInfo.slice(0, 4);
+    const specialMoveResult = movesInfo[4];
 
-  state.loadingOpponent = true;
-  render();
-
-  debounce = setTimeout(async () => {
-    try {
-      state.opponent = await fetchPokemon(val);
-      state.loadingOpponent = false;
-      render();
-    } catch {
-      state.loadingOpponent = false;
-      state.opponent = null;
-      opponentCardEl.style.backgroundColor = "";
-      opponentCardEl.classList.remove("dynamic-bg");
-      opponentCardEl.innerHTML = `<div class="error-state"><p class="who-is">¿Quién es ese Pokémon?</p></div>`;
-      battleBtn.disabled = true;
+    // Lógica de nombre del ataque especial
+    let specialMoveDisplay = "ATAQUE DESCONOCIDO";
+    if (isPlayer && specialMoveResult && specialMoveResult.status === "fulfilled") {
+        specialMoveDisplay = specialMoveResult.value.name;
     }
-  }, 400);
-});
 
-init();
+    container.innerHTML = `
+        <img src="${sprites.other['official-artwork'].front_default}" alt="${name}" class="pokemon-sprite">
+        <h2 style="text-transform: capitalize;">${typeData.emoji} ${name}</h2>
+        
+        <div class="pokemon-stats">
+            <span>❤️ ${hp}</span>
+            <span>⚔️ ${attack}</span>
+            <span>🛡️ ${defense}</span>
+            <span>⚡ ${energy}</span>
+        </div>
+
+        <div class="moves-buttons">
+            ${normalMoves.map(res => {
+                const moveName = res.status === "fulfilled" ? res.value.name : "---";
+                return `<button class="move-btn">${moveName}</button>`;
+            }).join('')}
+        </div>
+
+        <button class="def-move-btn" style="text-transform: uppercase;">
+            ${specialMoveDisplay}
+        </button>
+    `;
+}
