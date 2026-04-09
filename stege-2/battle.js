@@ -7,7 +7,7 @@ export const state = {
     playerMaxHP: 0,
     opponentHP: 0,
     opponentMaxHP: 0,
-    playerPosition: 2, // 1, 2, o 3
+    playerPosition: 2, 
     locked: false,
     definitiveUsed: false,
     attackOnCooldown: false,
@@ -26,3 +26,8 @@ export const formulas = {
         return Math.floor(stat * 0.4) + Math.floor(Math.random() * 20);
     }
 };
+
+export const wait = (ms) => new Promise(resolve => {
+    const timeout = setTimeout(resolve, ms);
+    state.timers.push(timeout);
+});

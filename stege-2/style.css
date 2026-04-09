@@ -1,115 +1,38 @@
-/* --- BASE Y COLORES (TU ESENCIA) --- */
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
 
-body { background: #0f172a; color: white; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
 
-.battle-container {
-    width: 95%;
-    max-width: 900px;
-    background: #0f172a;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+.battle-container { width: 95%; max-width: 850px; display: flex; flex-direction: column; gap: 20px; }
 
-/* --- CABECERA: BARRAS DE VIDA --- */
-.battle-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    background: #15294b; 
-    padding: 15px; 
-    border: 3px solid #3a69af; 
-    border-radius: 12px; 
-}
-.hp-section { width: 42%; }
-.name-label { display: block; font-weight: bold; margin-bottom: 5px; text-transform: uppercase; color: #f2d33b; letter-spacing: 1px; }
-.hp-bar { width: 100%; height: 18px; background: #0f172a; border: 2px solid #3a69af; border-radius: 10px; overflow: hidden; }
-.hp-fill { height: 100%; background: #4ade80; width: 100%; transition: width 0.3s ease, background 0.3s; }
-.vs-mini { font-weight: bold; color: #f2d33b; font-size: 1.2rem; }
+/* Cabecera y Barras */
+.battle-header { display: flex; justify-content: space-between; align-items: center; background: #15294b; padding: 15px; border: 2px solid #3a69af; border-radius: 12px; }
+.hp-section { width: 40%; }
+.name-label { display: block; font-weight: bold; color: #f2d33b; margin-bottom: 5px; text-transform: uppercase; }
+.hp-bar { width: 100%; height: 15px; background: #0f172a; border: 1px solid #3a69af; border-radius: 10px; overflow: hidden; }
+.hp-fill { height: 100%; background: #4ade80; width: 100%; transition: width 0.3s ease; }
 
-/* --- ARENA DE COMBATE (3x2) --- */
-.arena { display: flex; justify-content: center; padding: 10px; }
-.grid { display: grid; grid-template-columns: repeat(3, 140px); grid-template-rows: repeat(2, 140px); gap: 15px; }
-.cell { background: #1e293b; border: 2px solid #334155; border-radius: 12px; display: flex; justify-content: center; align-items: center; position: relative; transition: all 0.2s ease; }
+/* Grid 3x2 */
+.arena { display: flex; justify-content: center; }
+.grid { display: grid; grid-template-columns: repeat(3, 130px); grid-template-rows: repeat(2, 130px); gap: 12px; }
+.cell { background: #15294b; border: 2px solid #3a69af; border-radius: 10px; display: flex; justify-content: center; align-items: center; position: relative; }
+.cell.warning { background: rgba(239, 68, 68, 0.3); border-color: #ef4444; box-shadow: 0 0 15px #ef4444; }
 
-/* Celda donde caerá el ataque enemigo */
-.cell.warning { 
-    background: rgba(239, 68, 68, 0.2); 
-    border-color: #ef4444; 
-    box-shadow: inset 0 0 20px #ef4444, 0 0 15px #ef4444; 
-}
+.sprite { width: 90px; height: 90px; object-fit: contain; }
 
-.sprite { width: 100px; height: 100px; object-fit: contain; image-rendering: pixelated; }
-
-/* --- CONTROLES Y ATAQUES --- */
+/* Controles */
 .battle-controls { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
-.moves-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.moves-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.move-btn { background: #15294b; color: #f2d33b; border: 2px solid #f2d33b; padding: 12px; font-weight: bold; border-radius: 8px; cursor: pointer; position: relative; overflow: hidden; }
+.move-btn:hover { background: #1e3a6d; }
+.cooldown-overlay { position: absolute; top: 0; left: 0; height: 100%; background: rgba(0,0,0,0.5); }
 
-.move-btn { 
-    background: #f2d33b; 
-    color: #000;
-    border: 3px solid #3a69af; 
-    padding: 12px; 
-    font-weight: bold; 
-    cursor: pointer; 
-    border-radius: 8px; 
-    position: relative; 
-    overflow: hidden;
-    text-transform: uppercase;
-}
+.special-btn { width: 100%; margin-top: 8px; padding: 15px; background: #15294b; border: 2px solid #a855f7; color: #a855f7; font-weight: bold; border-radius: 8px; cursor: pointer; box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
 
-.move-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+/* Log */
+.log-panel { background: #15294b; border: 1px solid #3a69af; border-radius: 8px; overflow: hidden; }
+.log-title { background: #3a69af; padding: 5px 10px; font-size: 0.8rem; font-weight: bold; color: #f2d33b; }
+.log-content { padding: 10px; height: 140px; overflow-y: auto; font-size: 0.85rem; color: #cbd5e1; }
 
-/* La sombra que drena el botón (Cooldown) */
-.cooldown-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    pointer-events: none;
-}
-
-.special-btn { 
-    width: 100%; 
-    margin-top: 10px; 
-    padding: 12px; 
-    background: #1e293b; 
-    border: 3px solid #ef4444; 
-    color: #ef4444; 
-    font-weight: bold; 
-    border-radius: 8px; 
-    cursor: pointer; 
-}
-.special-btn:disabled { opacity: 0.3; border-color: #475569; color: #475569; }
-
-/* --- LOG DE BATALLA --- */
-.log-panel { background: #15294b; border: 2px solid #3a69af; border-radius: 8px; display: flex; flex-direction: column; height: 160px; }
-.log-title { background: #3a69af; padding: 5px 10px; font-size: 0.75rem; font-weight: bold; color: white; }
-.log-content { padding: 10px; overflow-y: auto; font-size: 0.85rem; color: #cbd5e1; line-height: 1.4; }
-
-/* --- PANTALLA FIN DE JUEGO --- */
-.battle-over {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(15, 23, 42, 0.9);
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    z-index: 1000;
-}
-.end-card {
-    background: #15294b;
-    border: 4px solid #f2d33b;
-    padding: 40px;
-    border-radius: 20px;
-    text-align: center;
-    max-width: 400px;
-}
-.end-card h2 { font-size: 2.5rem; margin-bottom: 15px; color: #f2d33b; }
-.end-card p { margin-bottom: 25px; font-size: 1.1rem; }
-.end-card button { 
-    background: #f2d33b; border: none; padding: 12px 25px; 
-    font-weight: bold; cursor: pointer; border-radius: 5px; 
-}
+/* Pantalla Final */
+.battle-over { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; }
+.end-card { background: #15294b; border: 3px solid #f2d33b; padding: 40px; border-radius: 15px; text-align: center; }
