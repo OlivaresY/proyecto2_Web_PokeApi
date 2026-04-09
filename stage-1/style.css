@@ -214,4 +214,10 @@ input {
     font-style: italic; 
     font-size: 2.2rem; 
     color: #ffcb05;
-    text-shadow: -3px -3px 0 #3b4cca
+    text-shadow: -3px -3px 0 #3b4cca;
+}
+
+.vs span {
+    display: block;
+    transform: rotate(-5deg); /* Un toque extra de estilo de pelea */
+}

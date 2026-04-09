@@ -24,10 +24,14 @@ function render() {
     if (state.loadingOpponent) renderSkeleton(opponentCardEl);
     else if (state.opponent) renderPokemon(state.opponent, opponentCardEl);
 
+    // El botón solo se activa si hay ambos Pokémon y no se está cargando nada
     battleBtn.disabled = !(state.player && state.opponent && !state.loadingOpponent);
 }
 
 async function init() {
+    // Limpieza de datos de batalla anteriores
+    localStorage.removeItem("battleData");
+
     document.getElementById("trainer-name").textContent = `🎒 ${TRAINER.name}`;
     document.getElementById("trainer-town").textContent = `🌳 ${TRAINER.hometown}`;
     document.getElementById("trainer-phrase").textContent = `💬 ${TRAINER.catchphrase}`;
@@ -44,15 +48,14 @@ async function init() {
         const moves = getValidMoves(data);
         const moveDetails = await fetchMovesDetails(moves);
         state.player = { ...data, movesInfo: moveDetails };
-    } catch (e) { console.error(e); }
-    finally {
+    } catch (e) { 
+        console.error(e); 
+    } finally {
         state.loadingPlayer = false;
         render();
-        const savedOpponent = localStorage.getItem("lastOpponent");
-        if (savedOpponent) {
-            searchInput.value = savedOpponent;
-            searchInput.dispatchEvent(new Event('input')); 
-        }
+        
+        // Al reiniciar la página, aseguramos que el buscador esté vacío
+        searchInput.value = ""; 
     }
 }
 
@@ -65,7 +68,7 @@ searchInput.addEventListener("input", (e) => {
 
     if (!val) {
         state.opponent = null;
-        state.loadingOpponent = false; // Reset inmediato
+        state.loadingOpponent = false; 
         opponentCardEl.style.backgroundColor = '';
         opponentCardEl.innerHTML = `<div class="empty-state"><p>Busca un Pokémon...</p></div>`;
         if(oppName) oppName.textContent = "🎒 DESCONOCIDO";
@@ -77,7 +80,7 @@ searchInput.addEventListener("input", (e) => {
 
     state.loadingOpponent = true;
     renderSkeleton(opponentCardEl);
-    battleBtn.disabled = true; // Bloqueo mientras busca
+    battleBtn.disabled = true; 
 
     debounce = setTimeout(async () => {
         try {
@@ -101,7 +104,23 @@ searchInput.addEventListener("input", (e) => {
 });
 
 battleBtn.addEventListener("click", () => {
-    localStorage.setItem("battleData", JSON.stringify({ player: state.player, opponent: state.opponent }));
+    if (!state.player || !state.opponent) return;
+
+    // LIMPIEZA DE MOVIMIENTOS: Extraemos solo el valor de las promesas cumplidas
+    const cleanPlayerMoves = state.player.movesInfo
+        .filter(res => res.status === "fulfilled")
+        .map(res => res.value);
+
+    const cleanOpponentMoves = state.opponent.movesInfo
+        .filter(res => res.status === "fulfilled")
+        .map(res => res.value);
+
+    // Guardamos los datos optimizados para que la Stage 2 sea más directa
+    localStorage.setItem("battleData", JSON.stringify({ 
+        player: { ...state.player, movesInfo: cleanPlayerMoves }, 
+        opponent: { ...state.opponent, movesInfo: cleanOpponentMoves } 
+    }));
+
     window.location.href = "../stage-2/index.html"; 
 });
 
