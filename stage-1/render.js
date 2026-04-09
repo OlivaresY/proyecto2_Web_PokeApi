@@ -51,7 +51,7 @@ export function renderPokemon(pokemon, container) {
     const specialMoveResult = movesInfo[4];
 
     // Lógica de nombre del ataque especial
-    let specialMoveDisplay = "ATAQUE DESCONOCIDO";
+    let specialMoveDisplay = "DESCONOCIDO";
     if (isPlayer && specialMoveResult && specialMoveResult.status === "fulfilled") {
         specialMoveDisplay = specialMoveResult.value.name;
     }
