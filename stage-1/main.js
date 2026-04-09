@@ -24,7 +24,7 @@ function render() {
     if (state.loadingOpponent) renderSkeleton(opponentCardEl);
     else if (state.opponent) renderPokemon(state.opponent, opponentCardEl);
 
-    // El botón solo se activa si hay ambos Pokémon y no se está cargando nada
+    //El boton solo se activa si hay ambos Pokemon y no se esta cargando nada
     battleBtn.disabled = !(state.player && state.opponent && !state.loadingOpponent);
 }
 
@@ -54,7 +54,7 @@ async function init() {
         state.loadingPlayer = false;
         render();
         
-        // Al reiniciar la página, aseguramos que el buscador esté vacío
+        //Al reiniciar la pagina, aseguramos que el buscador este vacío
         searchInput.value = ""; 
     }
 }
@@ -106,7 +106,7 @@ searchInput.addEventListener("input", (e) => {
 battleBtn.addEventListener("click", () => {
     if (!state.player || !state.opponent) return;
 
-    // LIMPIEZA DE MOVIMIENTOS: Extraemos solo el valor de las promesas cumplidas
+    //Limpieza de movimientos: Extraemos solo el valor de las promesas cumplidas
     const cleanPlayerMoves = state.player.movesInfo
         .filter(res => res.status === "fulfilled")
         .map(res => res.value);
@@ -115,7 +115,7 @@ battleBtn.addEventListener("click", () => {
         .filter(res => res.status === "fulfilled")
         .map(res => res.value);
 
-    // Guardamos los datos optimizados para que la Stage 2 sea más directa
+    //Guardamos los datos optimizados para que la Stage 2 sea más directa
     localStorage.setItem("battleData", JSON.stringify({ 
         player: { ...state.player, movesInfo: cleanPlayerMoves }, 
         opponent: { ...state.opponent, movesInfo: cleanOpponentMoves } 

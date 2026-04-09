@@ -1,51 +1,53 @@
-<!DOCTYPE html>
-<html lang="es">
+<!DOCTYPE html> <!-- Define que es un documento HTML5 -->
+<html lang="es"> <!-- Indica que el idioma es español -->
 <head>
-    <meta charset="UTF-8">
-    <title>Pokémon Battle</title>
-    <link rel="stylesheet" href="./style.css">
+    <meta charset="UTF-8"> <!-- Permite usar caracteres especiales (tildes, ñ, etc.) -->
+    <title>Pokémon Battle</title> <!-- Título que aparece en la pestaña del navegador -->
+    <link rel="stylesheet" href="./style.css"> <!-- Conecta el archivo de estilos CSS -->
 </head>
 <body>
 
-<main class="container">
-    <div class="battle-layout">
-        <section class="pokemon player">
-            <div class="trainer-card">
-                <h1>Entrenador</h1>
-                <p id="trainer-name">Cargando...</p>
-                <p id="trainer-town">Cargando...</p>
-                <p id="trainer-phrase">Cargando...</p>
+<main class="container"> <!-- Contenedor principal de toda la aplicación -->
+    <div class="battle-layout"> <!-- Layout que organiza jugador, VS y oponente -->
+
+        <section class="pokemon player"> <!-- Sección del jugador -->
+            <div class="trainer-card"> <!-- Tarjeta con datos del entrenador -->
+                <h1>Entrenador</h1> <!-- Título -->
+                <p id="trainer-name">Cargando...</p> <!-- Nombre dinámico (JS lo reemplaza) -->
+                <p id="trainer-town">Cargando...</p> <!-- Pueblo dinámico -->
+                <p id="trainer-phrase">Cargando...</p> <!-- Frase dinámica -->
             </div>
 
-            <h2>Tu Pokémon:</h2>
-            <div class="pokemon-card dynamic-bg" id="player-card">
-                <p class="loading">Cargando tu Pokémon...</p>
+            <h2>Tu Pokémon:</h2> <!-- Título de la sección del Pokémon -->
+
+            <div class="pokemon-card dynamic-bg" id="player-card"> <!-- Contenedor donde se renderiza el Pokémon -->
+                <p class="loading">Cargando tu Pokémon...</p> <!-- Mensaje mientras se carga -->
             </div>
         </section>
 
-        <div class="vs"><span>VS</span></div>
+        <div class="vs"><span>VS</span></div> <!-- Elemento visual que separa jugador y oponente -->
 
-        <section class="pokemon opponent">
-            <div class="trainer-card">
-                <h2>Oponente</h2>
-                <p id="opponent-name">Esperando...</p>
-                <p id="opponent-town">Esperando...</p>
-                <p id="opponent-phrase">Esperando...</p>
+        <section class="pokemon opponent"> <!-- Sección del oponente -->
+            <div class="trainer-card"> <!-- Tarjeta del entrenador rival -->
+                <h2>Oponente</h2> <!-- Título -->
+                <p id="opponent-name">Esperando...</p> <!-- Nombre dinámico -->
+                <p id="opponent-town">Esperando...</p> <!-- Pueblo dinámico -->
+                <p id="opponent-phrase">Esperando...</p> <!-- Frase dinámica -->
             </div>
 
-            <input type="text" id="search" placeholder="Buscar Pokémon..." />
+            <input type="text" id="search" placeholder="Buscar Pokémon..." /> <!-- Input para buscar Pokémon -->
 
-            <div class="pokemon-card dynamic-bg" id="opponent-card">
-                <p class="loading">Busca un Pokémon...</p>
+            <div class="pokemon-card dynamic-bg" id="opponent-card"> <!-- Contenedor del Pokémon buscado -->
+                <p class="loading">Busca un Pokémon...</p> <!-- Mensaje inicial -->
             </div>
         </section>
     </div>
 
-    <div class="battle-action">
-        <button id="battle-btn" disabled>Ir a batalla</button>
+    <div class="battle-action"> <!-- Contenedor del botón de acción -->
+        <button id="battle-btn" disabled>Ir a batalla</button> <!-- Botón desactivado hasta que haya datos -->
     </div>
 </main>
 
-<script type="module" src="./main.js"></script>
+<script type="module" src="./main.js"></script> <!-- Conecta el JS y permite usar módulos -->
 </body>
 </html>
