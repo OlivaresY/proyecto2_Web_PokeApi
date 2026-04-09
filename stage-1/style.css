@@ -221,3 +221,34 @@ input {
     display: block;
     transform: rotate(-5deg); /* Un toque extra de estilo de pelea */
 }
+
+/* 🚩 SKELETON ANIMATION */
+.skeleton { 
+    background: #1e293b linear-gradient(
+        90deg, 
+        transparent 25%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 75%
+    ); 
+    background-size: 200% 100%; 
+    animation: shimmer 1.5s infinite linear; 
+}
+
+@keyframes shimmer { 
+    0% { background-position: -200% 0; } 
+    100% { background-position: 200% 0; } 
+}
+
+.skeleton-img { 
+    width: 130px; 
+    height: 130px; 
+    border-radius: 8px; 
+    margin-bottom: 15px; 
+}
+
+.skeleton-text { 
+    width: 80%; 
+    height: 20px; 
+    border-radius: 4px; 
+    margin-bottom: 10px; 
+}
