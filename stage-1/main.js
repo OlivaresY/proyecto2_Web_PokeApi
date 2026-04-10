@@ -24,12 +24,10 @@ function render() {
     if (state.loadingOpponent) renderSkeleton(opponentCardEl);
     else if (state.opponent) renderPokemon(state.opponent, opponentCardEl);
 
-    //El boton solo se activa si hay ambos Pokemon y no se esta cargando nada
     battleBtn.disabled = !(state.player && state.opponent && !state.loadingOpponent);
 }
 
 async function init() {
-    // Limpieza de datos de batalla anteriores
     localStorage.removeItem("battleData");
 
     document.getElementById("trainer-name").textContent = `🎒 ${TRAINER.name}`;
@@ -53,8 +51,6 @@ async function init() {
     } finally {
         state.loadingPlayer = false;
         render();
-        
-        //Al reiniciar la pagina, aseguramos que el buscador este vacío
         searchInput.value = ""; 
     }
 }
@@ -71,9 +67,6 @@ searchInput.addEventListener("input", (e) => {
         state.loadingOpponent = false; 
         opponentCardEl.style.backgroundColor = '';
         opponentCardEl.innerHTML = `<div class="empty-state"><p>Busca un Pokémon...</p></div>`;
-        if(oppName) oppName.textContent = "🎒 DESCONOCIDO";
-        if(oppTown) oppTown.textContent = "🌳 DESCONOCIDO";
-        if(oppPhrase) oppPhrase.textContent = "💬 DESCONOCIDO";
         battleBtn.disabled = true;
         return;
     }
@@ -90,13 +83,12 @@ searchInput.addEventListener("input", (e) => {
             state.opponent = { ...data, movesInfo: moveDetails };
             
             state.loadingOpponent = false;
-            localStorage.setItem("lastOpponent", val);
             render();
         } catch (error) {
             if (error.name === 'AbortError') return;
             state.loadingOpponent = false;
             state.opponent = null;
-            opponentCardEl.style.backgroundColor = '';
+            // --- CORRECCIÓN AQUÍ: CLASE 'who-is' RESTAURADA ---
             opponentCardEl.innerHTML = `<div class="error-state"><p class="who-is">¿Quién es ese Pokémon?</p></div>`;
             battleBtn.disabled = true;
         }
@@ -106,22 +98,18 @@ searchInput.addEventListener("input", (e) => {
 battleBtn.addEventListener("click", () => {
     if (!state.player || !state.opponent) return;
 
-    //Limpieza de movimientos: Extraemos solo el valor de las promesas cumplidas
-    const cleanPlayerMoves = state.player.movesInfo
-        .filter(res => res.status === "fulfilled")
-        .map(res => res.value);
+    const cleanPlayerMoves = state.player.movesInfo.map(res => res.value || res);
+    const cleanOpponentMoves = state.opponent.movesInfo.map(res => res.value || res);
 
-    const cleanOpponentMoves = state.opponent.movesInfo
-        .filter(res => res.status === "fulfilled")
-        .map(res => res.value);
-
-    //Guardamos los datos optimizados para que la Stage 2 sea más directa
-    localStorage.setItem("battleData", JSON.stringify({ 
+    const battleData = { 
         player: { ...state.player, movesInfo: cleanPlayerMoves }, 
         opponent: { ...state.opponent, movesInfo: cleanOpponentMoves } 
-    }));
+    };
 
-    window.location.href = "../stage-2/index.html"; 
+    localStorage.setItem("battleData", JSON.stringify(battleData));
+    
+    // Ruta corregida según tu estructura
+    window.location.href = "./stage-2/index.html"; 
 });
 
 init();

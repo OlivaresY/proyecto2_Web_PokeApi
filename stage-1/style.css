@@ -1,65 +1,61 @@
 /* Reset y básicos */
 * { 
-    margin: 0; /*Elimina espacios externos por defecto de TODOS los elementos*/
-    padding: 0; /*Elimina espacios internos por defecto */
-    box-sizing: border-box; /*Hace que el width incluya padding y border (más fácil de controlar tamaños)*/
-    font-family: Arial, sans-serif; /*Define una fuente base para todo*/
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: Arial, sans-serif; 
 }
 
 body { 
-    background: #0f172a; /*Color oscuro de fondo*/
-    color: white; /*Todo el texto será blanco por defecto*/ 
+    background: #0f172a; 
+    color: white; 
 }
 
 .container { 
-    max-width: 1100px;/*Limita el ancho máximo (no se estira demasiado en pantallas grandes)*/
-    margin: auto; /*Centra horizontalmente*/
-    padding: 20px; /*Espacio interno*/
-    text-align: center; /*Centra texto dentro*/
+    max-width: 1100px;
+    margin: auto; 
+    padding: 20px; 
+    text-align: center; 
 }
 
-
 .battle-layout {
-    display: flex; /* Activa Flexbox (para alinear elementos fácilmente)*/
-    align-items: center; /* Centra verticalmente*/
-    justify-content: center; /* Centra horizontalmente*/
-    gap: 30px; /* Espacio entre tarjetas y VS*/
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 30px; 
     margin: 30px auto;
     width: 100%;
 }
 
 .pokemon {
-    width: 420px; /*Tamaño fijo*/
-    flex-shrink: 0; /*Evita que se encoja en pantallas pequeñas*/
+    width: 420px; 
+    flex-shrink: 0; 
     border: 2px solid #3a69af;
     border-radius: 12px;
     padding: 15px;
     background: #15294b;
 }
 
-
 .vs {
     font-family: "Arial Black", sans-serif;
-    font-weight: 900; /*Texto súper grueso*/
+    font-weight: 900; 
     font-style: italic;
-    font-size: 4.5rem; /*Tamaño grande*/
+    font-size: 4.5rem; 
     color: #ffcb05;
-    text-shadow: /*Esto crea un borde estilo Pokémon alrededor del texto.*/
+    text-shadow: 
         -4px -4px 0 #3b4cca, 
          4px -4px 0 #3b4cca, 
         -4px  4px 0 #3b4cca, 
          4px  4px 0 #3b4cca;
-    /*Recorta el elemento para que parezca “roto” o con grietas.*/
     clip-path: polygon(5% 15%, 15% 5%, 40% 15%, 60% 5%, 85% 15%, 100% 10%, 95% 85%, 75% 95%, 50% 85%, 25% 95%, 5% 80%); 
     min-width: 150px;
     flex-shrink: 0;
-    display: flex;              /*Esto*/
-    justify-content: center;    /*Centra*/
-    align-items: center;        /*el*/
-    text-align: center;         /*vs*/
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
-/* Tarjetas Pokémon */
 .pokemon-card {
     background: #1e293b; 
     padding: 20px; 
@@ -67,21 +63,21 @@ body {
     border: 2px solid #3a69af;
     min-height: 440px; 
     display: flex; 
-    flex-direction: column; /*Ordena contenido en columna*/
-    justify-content: center; /*Centra vertical*/
-    align-items: center; /*Centra horizontal*/
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
     width: 100%;
     transition: background-color 0.3s ease;
 }
 
-.pokemon-sprite { /*Evita que la imagen se deforme*/
+.pokemon-sprite { 
     width: 130px; 
     height: 130px; 
-    object-fit: contain; /*mantiene proporción*/
+    object-fit: contain; 
     margin-bottom: 10px; 
 }
 
-.pokemon-stats { /*Coloca stats en fila (HP, ataque, etc).*/
+.pokemon-stats { 
     display: flex; 
     justify-content: center; 
     gap: 15px; 
@@ -96,7 +92,6 @@ body {
     border: 1px solid #3a69af; 
 }
 
-/* Buscador e inputs */
 input { 
     margin: 10px 0; 
     padding: 10px; 
@@ -109,7 +104,7 @@ input {
 
 .moves-buttons { 
     display: flex; 
-    flex-wrap: wrap; /*Permite que los botones bajen a otra línea 2x2*/
+    flex-wrap: wrap; 
     gap: 8px; 
     justify-content: center; 
     margin-top: 15px; 
@@ -122,14 +117,14 @@ input {
     background: #f2d33b; 
     color: #000;
     border: 2px solid #000; 
-    flex: 1 1 calc(45% - 10px); /*Cada botón ocupa ~45% = 2 botenes por fila*/
+    flex: 1 1 calc(45% - 10px); 
     font-weight: bold; 
     transition: all 0.3s ease;
 }
 
 #player-card .move-btn:hover { 
     cursor: pointer; 
-    transform: translateY(-5px); /*Efecto de “levantar” el botón → sensación interactiva.*/
+    transform: translateY(-5px); 
     box-shadow: 0 5px 15px rgba(242, 211, 59, 0.5); 
 }
 
@@ -139,7 +134,7 @@ input {
     width: 100%; 
     border-radius: 10px;
     background: #1e293b; 
-    border: 2px solid red;  /*Diferencia visual de movimiento especial*/
+    border: 2px solid red; 
     color: red; 
     font-weight: bold; 
     text-transform: uppercase; 
@@ -151,13 +146,6 @@ input {
     background: red; 
     color: white; 
     transform: translateY(-5px); 
-}
-
-/*BOTÓN IR A BATALLA CON GRIETAS PROFUNDAS*/
-.battle-action { 
-    margin-top: 25px; 
-    display: flex; 
-    justify-content: center; 
 }
 
 #battle-btn {
@@ -194,13 +182,13 @@ input {
 #battle-btn:disabled { 
     background: #4b5563; 
     color: #9ca3af; 
-    clip-path: none; /*pierde forma forma especial, parece apagado*/
+    clip-path: none; 
     cursor: not-allowed; 
     border-radius: 8px; 
     box-shadow: none; 
 }
 
-/* Estados de texto */
+/* --- ESTADOS DE TEXTO (RECUPERADOS) --- */
 .empty-state, .error-state { 
     display: flex; 
     justify-content: center; 
@@ -216,14 +204,16 @@ input {
     font-size: 2.2rem; 
     color: #ffcb05;
     text-shadow: -3px -3px 0 #3b4cca;
+    /* Animación agregada para que pulse */
+    animation: poke-pulse 1.2s infinite ease-in-out;
 }
 
-.vs span {
-    display: block;
-    transform: rotate(-5deg); /*Un toque extra de estilo de pelea */
+@keyframes poke-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.95); opacity: 0.7; }
 }
 
-/*SKELETON ANIMATION*/
+/* SKELETON */
 .skeleton { 
     background: #1e293b linear-gradient(
         90deg, 
@@ -232,25 +222,31 @@ input {
         transparent 75%
     ); 
     background-size: 200% 100%; 
-    animation: shimmer 1.5s infinite linear; /*efecto shine como de carga*/
+    animation: shimmer 1.5s infinite linear; 
 }
 
-/*El fondo se mueve → da sensación de “cargando”*/
 @keyframes shimmer { 
     0% { background-position: -200% 0; } 
     100% { background-position: 200% 0; } 
 }
 
-.skeleton-img { 
-    width: 130px; 
-    height: 130px; 
-    border-radius: 8px; 
-    margin-bottom: 15px; 
+/* --- ESTILOS STAGE 2 (DAÑO) --- */
+.damage-x {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ef4444;
+    font-size: 8rem;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 1000;
+    text-shadow: 0 0 20px rgba(0,0,0,0.9);
+    animation: x-anim 0.5s forwards;
 }
 
-.skeleton-text { 
-    width: 80%; 
-    height: 20px; 
-    border-radius: 4px; 
-    margin-bottom: 10px; 
+@keyframes x-anim {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+    100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
 }
