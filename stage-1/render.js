@@ -1,5 +1,3 @@
-//Objeto que contiene información de cada tipo de Pokémon
-//(color para la tarjeta y un emoji representativo)
 const TYPE_INFO = {
     fire: { color: '#ff9c54', emoji: '🔥' }, water: { color: '#4d90d5', emoji: '💧' },
     grass: { color: '#63bb5b', emoji: '🌿' }, electric: { color: '#f3d23b', emoji: '⚡' },
@@ -12,9 +10,8 @@ const TYPE_INFO = {
     fairy: { color: '#ec8fe6', emoji: '✨' }, normal: { color: '#9099a1', emoji: '🔘' }
 };
 
-//Función para mostrar un "skeleton" (pantalla de carga)
 export function renderSkeleton(container) {
-    container.style.backgroundColor = '#1a233a'; // Cambia el color de fondo mientras carga
+    container.style.backgroundColor = '#1a233a'; 
     container.innerHTML = `
         <div class="skeleton-container">
             <div class="skeleton skeleton-img"></div>
@@ -23,35 +20,28 @@ export function renderSkeleton(container) {
         </div>
     `;
 }
-//Función principal para renderizar el Pokémon en pantalla
+
 export function renderPokemon(pokemon, container) {
-    const { name, sprites, stats, movesInfo, types } = pokemon; //Extrae datos importantes del objeto Pokémon
-    const isPlayer = container.id === "player-card"; //Verifica si es el jugador o el oponente
+    const { name, sprites, stats, movesInfo, types } = pokemon;
+    const isPlayer = container.id === "player-card";
 
-    const mainType = types[0].type.name; //Obtiene el tipo principal del Pokémon
-    const typeData = TYPE_INFO[mainType] || { color: '#9099a1', emoji: '❓' };// Busca color y emoji del tipo (si no existe, usa uno por defecto)
-    container.style.backgroundColor = typeData.color; //Aplica el color de fondo según el tipo
+    const mainType = types[0].type.name;
+    const typeData = TYPE_INFO[mainType] || { color: '#9099a1', emoji: '❓' };
+    container.style.backgroundColor = typeData.color;
 
-    //Obtiene estadísticas SOLO si es el jugador
-    //Si es oponente, muestra "???"
     const hp = isPlayer ? stats.find(s => s.stat.name === "hp").base_stat : "???"; 
     const attack = isPlayer ? stats.find(s => s.stat.name === "attack").base_stat : "???";
     const defense = isPlayer ? stats.find(s => s.stat.name === "defense").base_stat : "???";
     const energy = isPlayer ? stats.find(s => s.stat.name === "speed").base_stat : "???";
 
-    const normalMoves = movesInfo.slice(0, 4);//Toma los primeros 4 movimientos como normales
-    const specialMoveResult = movesInfo[4]; //El 5to movimiento es el especial
+    const normalMoves = movesInfo.slice(0, 4);
+    const specialMoveResult = movesInfo[4];
 
-    //Solo muestra el nombre real si:
-    //1. Es el jugador
-    //2. Existe el movimiento
-    //3. La petición fue exitosa (fulfilled)
     let specialMoveDisplay = "DESCONOCIDO";
     if (isPlayer && specialMoveResult && specialMoveResult.status === "fulfilled") {
         specialMoveDisplay = specialMoveResult.value.name;
     }
 
-     //Inserta todo el contenido HTML en la tarjeta
     container.innerHTML = `
         <img src="${sprites.other['official-artwork'].front_default}" alt="${name}" class="pokemon-sprite">
         <h2 style="text-transform: capitalize;">${typeData.emoji} ${name}</h2>

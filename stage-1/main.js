@@ -21,6 +21,7 @@ function render() {
         state.playerRendered = true; 
     }
 
+    // Aquí es donde se recupera el efecto Shine
     if (state.loadingOpponent) renderSkeleton(opponentCardEl);
     else if (state.opponent) renderPokemon(state.opponent, opponentCardEl);
 
@@ -71,8 +72,9 @@ searchInput.addEventListener("input", (e) => {
         return;
     }
 
+    // --- EL CAMBIO PRECISO: Activamos carga y dibujamos el skeleton inmediatamente ---
     state.loadingOpponent = true;
-    renderSkeleton(opponentCardEl);
+    render(); 
     battleBtn.disabled = true; 
 
     debounce = setTimeout(async () => {
@@ -80,15 +82,14 @@ searchInput.addEventListener("input", (e) => {
             const data = await fetchPokemon(val, abortController.signal);
             const moves = getValidMoves(data);
             const moveDetails = await fetchMovesDetails(moves, abortController.signal);
-            state.opponent = { ...data, movesInfo: moveDetails };
             
+            state.opponent = { ...data, movesInfo: moveDetails };
             state.loadingOpponent = false;
-            render();
+            render(); // Quitamos el skeleton y ponemos al Pokémon encontrado
         } catch (error) {
             if (error.name === 'AbortError') return;
             state.loadingOpponent = false;
             state.opponent = null;
-            // --- CORRECCIÓN AQUÍ: CLASE 'who-is' RESTAURADA ---
             opponentCardEl.innerHTML = `<div class="error-state"><p class="who-is">¿Quién es ese Pokémon?</p></div>`;
             battleBtn.disabled = true;
         }
@@ -107,8 +108,6 @@ battleBtn.addEventListener("click", () => {
     };
 
     localStorage.setItem("battleData", JSON.stringify(battleData));
-    
-    // Ruta corregida según tu estructura
     window.location.href = "./stage-2/index.html"; 
 });
 
