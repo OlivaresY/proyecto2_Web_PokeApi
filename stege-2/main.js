@@ -30,6 +30,29 @@ function handleKeyDown(e) {
     if (e.key === "ArrowRight" && state.playerPosition < 3) { state.playerPosition++; render(state); }
 }
 
+function triggerDamageEffect(isPlayer) {
+    const id = isPlayer ? "player-sprite" : "opponent-sprite";
+    const el = document.getElementById(id);
+    if (el) {
+        el.classList.add("dmg-shake");
+        setTimeout(() => el.classList.remove("dmg-shake"), 500);
+    }
+}
+
+function handlePlayerAttack(e) {
+    const btn = e.target.closest(".move-btn");
+    if (!btn || state.phase !== 'fighting' || state.attackOnCooldown) return;
+    
+    const damage = formulas.playerAttack(parseInt(btn.dataset.power));
+    state.opponentHP = Math.max(0, state.opponentHP - damage);
+    state.log.push(`¡${state.player.name} usó ${btn.dataset.moveName.toUpperCase()}! Daño: ${damage}`);
+    
+    triggerDamageEffect(false); // Efecto en el oponente
+    startCooldown(2500, btn);
+    checkBattleEnd();
+    render(state);
+}
+
 function startCooldown(duration, btn) {
     const start = performance.now();
     state.attackOnCooldown = true;
@@ -46,21 +69,11 @@ function startCooldown(duration, btn) {
     requestAnimationFrame(tick);
 }
 
-function handlePlayerAttack(e) {
-    const btn = e.target.closest(".move-btn");
-    if (!btn || state.phase !== 'fighting' || state.attackOnCooldown) return;
-    const damage = formulas.playerAttack(parseInt(btn.dataset.power));
-    state.opponentHP = Math.max(0, state.opponentHP - damage);
-    state.log.push(`¡${state.player.name} usó ${btn.dataset.moveName.toUpperCase()}! Daño: ${damage}`);
-    startCooldown(2500, btn);
-    checkBattleEnd();
-    render(state);
-}
-
 function handleSpecialAttack() {
     if (state.phase !== 'fighting' || state.definitiveUsed) return;
     state.definitiveUsed = true;
     state.opponentHP = 0;
+    triggerDamageEffect(false);
     state.log.push(`¡${TRAINER.definitiveMoveName.toUpperCase()}! ${TRAINER.definitiveMoveFlavor}`);
     checkBattleEnd();
     render(state);
@@ -79,6 +92,7 @@ function scheduleEnemyAttack() {
         if (state.playerPosition === target) {
             const dmg = formulas.enemyAttack(state.opponent.stats.find(s => s.stat.name === "attack").base_stat);
             state.playerHP = Math.max(0, state.playerHP - dmg);
+            triggerDamageEffect(true); // Efecto en el jugador
             state.log.push(`¡Golpe enemigo! -${dmg} HP`);
         } else { state.log.push(`¡Esquivado!`); }
         state.incomingAttack = null; state.locked = false;

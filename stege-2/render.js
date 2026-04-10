@@ -5,13 +5,13 @@ export function render(state) {
 
     if (!player || !opponent) return;
 
-    // Vida
+    // 1. Barras de Vida
     document.getElementById("player-hp-fill").style.width = `${(playerHP / playerMaxHP) * 100}%`;
     document.getElementById("opponent-hp-fill").style.width = `${(opponentHP / opponentMaxHP) * 100}%`;
     document.getElementById("player-hp-text").textContent = `${Math.ceil(playerHP)} / ${playerMaxHP}`;
     document.getElementById("opponent-hp-text").textContent = `${Math.ceil(opponentHP)} / ${opponentMaxHP}`;
 
-    // Grid y Movimiento
+    // 2. Grid y Sprites
     const cells = document.querySelectorAll(".cell");
     cells.forEach((cell, index) => {
         const cellIndex = index + 1;
@@ -20,6 +20,7 @@ export function render(state) {
 
         if (cellIndex === 2) { // Oponente
             const img = document.createElement("img");
+            img.id = "opponent-sprite";
             img.src = opponent.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default || opponent.sprites.front_default;
             img.className = "sprite";
             cell.appendChild(img);
@@ -27,6 +28,7 @@ export function render(state) {
 
         if (cellIndex === playerPosition + 3) { // Jugador
             const img = document.createElement("img");
+            img.id = "player-sprite";
             img.src = player.sprites.versions?.['generation-v']?.['black-white']?.animated?.back_default || player.sprites.back_default || player.sprites.front_default;
             img.className = "sprite";
             cell.appendChild(img);
@@ -37,7 +39,7 @@ export function render(state) {
         }
     });
 
-    // Botones (Solo se crean la primera vez)
+    // 3. Botones (Se crean solo una vez)
     const movesGrid = document.getElementById("normal-moves");
     if (movesGrid && movesGrid.innerHTML === "") {
         player.movesInfo.slice(0, 4).forEach(move => {
@@ -45,28 +47,32 @@ export function render(state) {
             btn.className = "move-btn";
             btn.dataset.moveName = move.name;
             btn.dataset.power = move.power || 60;
-            btn.textContent = `⚔️ ${move.name.toUpperCase()}`;
+            btn.innerHTML = `⚔️ ${move.name.toUpperCase()}`;
             movesGrid.appendChild(btn);
         });
         document.getElementById("special-move-btn").textContent = `🌟 ${TRAINER.definitiveMoveName.toUpperCase()}`;
     }
 
-    // Cooldowns y Bloqueos
+    // Bloqueos de botones
     document.querySelectorAll(".move-btn").forEach(b => b.disabled = (attackOnCooldown || phase === 'ended'));
-    const specBtn = document.getElementById("special-move-btn");
-    specBtn.disabled = (attackOnCooldown || definitiveUsed || phase === 'ended');
+    document.getElementById("special-move-btn").disabled = (attackOnCooldown || definitiveUsed || phase === 'ended');
 
-    // Log
+    // 4. Log
     const logBox = document.getElementById("battle-log");
     logBox.innerHTML = log.map(m => `<p>> ${m}</p>`).join("");
     logBox.scrollTop = logBox.scrollHeight;
 
-    // Fin de juego
+    // 5. Pantalla Final
     if (phase === 'ended' && !document.querySelector(".battle-over")) {
         const isWin = playerHP > 0;
         const div = document.createElement("div");
         div.className = "battle-over";
-        div.innerHTML = `<div class="end-card"><h2>${isWin ? '¡VICTORIA!' : 'DERROTA'}</h2><p>${isWin ? TRAINER.winMessage : TRAINER.loseMessage}</p><button onclick="location.reload()">REINTENTAR</button></div>`;
+        div.innerHTML = `
+            <div class="end-card">
+                <h2>${isWin ? '¡VICTORIA!' : 'DERROTA'}</h2>
+                <p>${isWin ? TRAINER.winMessage : TRAINER.loseMessage}</p>
+                <button onclick="window.location.href='../index.html'">VOLVER AL INICIO</button>
+            </div>`;
         document.body.appendChild(div);
     }
 }
