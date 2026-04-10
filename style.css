@@ -1,11 +1,13 @@
+/* Estilos Base */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: #0f172a;
     color: white;
+    overflow: hidden;
 }
 
-/* Contenedor */
+/* Contenedor Principal */
 .menu-container {
     display: flex;
     flex-direction: column;
@@ -13,32 +15,103 @@ body {
     align-items: center;
     height: 100vh;
     text-align: center;
+    background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
 }
 
 /* Título */
 .menu-container h1 {
+    font-size: 3.5rem;
     color: #f2d33b;
-    margin-bottom: 30px;
+    margin-bottom: 50px;
+    text-shadow: 3px 3px 0 #3b4cca, -2px -2px 0 #3b4cca;
 }
 
-/* Links */
+/* Contenedor de Botones */
 .menu-links {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+    position: relative;
 }
 
-.menu-links a {
+/* Estilo de los Botones */
+.btn-stage {
     text-decoration: none;
-    padding: 15px 30px;
+    padding: 18px 45px;
     background: #f2d33b;
     color: #0f172a;
-    border-radius: 10px;
-    font-weight: bold;
-    transition: 0.3s;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+    position: relative; 
+    border: none;
+    box-shadow: 0 6px 0 #b59b1d;
+    width: 250px; 
+    display: block;
 }
 
-.menu-links a:hover {
-    transform: scale(1.05);
+.btn-stage:hover {
     background: #ffe95a;
+    transform: scale(1.02);
+}
+
+/* --- PIKACHU API COMO INDICADOR EXTERNO --- */
+.btn-stage::before {
+    content: ""; /* Eliminamos el emoji, el JS pondrá la imagen aquí */
+    position: absolute;
+    
+    /* Configuración de imagen */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+    /* Tamaño ideal para sprites de la API */
+    width: 60px; 
+    height: 60px;
+    
+    /* Posicionamiento fuera del botón a la izquierda */
+    left: -80px; 
+    top: 50%;
+    transform: translateY(-50%); 
+    
+    opacity: 0; 
+    
+    /* Brillo Eléctrico para el sprite */
+    filter: drop-shadow(0 0 10px rgba(242, 211, 59, 0.8));
+    
+    transition: all 0.2s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    pointer-events: none;
+}
+
+/* Efecto al poner el mouse */
+.btn-stage:hover::before {
+    opacity: 1;
+    left: -65px; 
+    transform: translateY(-50%) scale(1.1);
+    animation: bounceArrow 0.6s infinite alternate, electricShine 1s infinite; 
+}
+
+/* Animación de "flecha" horizontal */
+@keyframes bounceArrow {
+    from { left: -75px; }
+    to { left: -60px; }
+}
+
+/* Brillo Eléctrico (Mejorado para sprites) */
+@keyframes electricShine {
+    0% { filter: drop-shadow(0 0 5px #f2d33b) brightness(1); }
+    50% { filter: drop-shadow(0 0 15px #f2d33b) brightness(1.2); }
+    100% { filter: drop-shadow(0 0 5px #f2d33b) brightness(1); }
+}
+
+.credits {
+    margin-top: 40px; /* Esto crea el espacio exacto bajo el último botón */
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4); /* Un blanco sutil para que sea profesional */
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    pointer-events: none;
 }

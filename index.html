@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pokémon Battle</title>
     <link rel="stylesheet" href="./style.css">
 </head>
@@ -11,10 +12,38 @@
     <h1>Pokémon Battle</h1>
 
     <div class="menu-links">
-        <a href="./stage-1/index.html">Ir a Stage 1</a>
-        <a href="./stage-2/index.html">Ir a Stage 2</a>
+        <a href="./stage-1/index.html" class="btn-stage">Ir a Stage 1</a>
+        <a href="./stage-2/index.html" class="btn-stage">Ir a Stage 2</a>
     </div>
+
+    <footer class="credits">
+        &copy; 2026 DERECHOS RESERVADOS | YOR PROD.
+    </footer>
 </main>
+
+<script>
+    async function cargarPikachu() {
+        try {
+            // Llamamos a la API oficial
+            const response = await fetch("https://pokeapi.co/api/v2/pokemon/pikachu");
+            const data = await response.json();
+            
+            // Extraemos el sprite animado
+            const pikachuSprite = data.sprites.versions['generation-v']['black-white'].animated.front_default;
+            
+            // Inyectamos la imagen directamente en el CSS del proyecto
+            const style = document.createElement('style');
+            style.innerHTML = `.btn-stage::before { background-image: url("${pikachuSprite}"); }`;
+            document.head.appendChild(style);
+            
+        } catch (e) {
+            console.error("Error al traer a Pikachu:", e);
+        }
+    }
+
+    // Se ejecuta apenas carga la página
+    window.addEventListener('DOMContentLoaded', cargarPikachu);
+</script>
 
 </body>
 </html>
