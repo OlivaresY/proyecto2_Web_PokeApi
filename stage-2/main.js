@@ -106,17 +106,25 @@ function startCooldown(duration, btn) {
 
 function handleSpecialAttack() {
     if (state.phase !== 'fighting' || state.definitiveUsed) return;
+    
     state.definitiveUsed = true;
-    state.opponentHP = 0;
-    render(state);
-    triggerDamageEffect(false);
+    
+    // 1. Primero aplicamos el daño visualmente pero NO terminamos el juego aún
+    state.opponentHP = 0; 
+    render(state); // Esto actualiza la barra de vida a 0
+    triggerDamageEffect(false); // Esto lanza la "X"
+    
     state.log.push(`¡${TRAINER.definitiveMoveName.toUpperCase()}! ${TRAINER.definitiveMoveFlavor}`);
-    checkBattleEnd();
+
+    // 2. Esperamos 600ms (lo que dura la animación de la X) antes de mostrar el cartel de victoria
+    setTimeout(() => {
+        checkBattleEnd();
+    }, 1000);
 }
 
 function scheduleEnemyAttack() {
     if (state.phase !== 'fighting') return;
-    const delay = (Math.random() * 2 + 1.5) * 1000;
+    const delay = (Math.random() * 1.2 + 0.8) * 1000;
     
     const t = setTimeout(async () => {
         // CORRECCIÓN: Si la batalla terminó mientras esperábamos el delay, abortamos
@@ -157,6 +165,7 @@ function checkBattleEnd() {
     if (state.playerHP <= 0 || state.opponentHP <= 0) {
         state.phase = 'ended';
         state.timers.forEach(clearTimeout);
+        document.removeEventListener('keydown', handleKeyDown);
         render(state);
     }
 }

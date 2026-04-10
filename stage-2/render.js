@@ -1,14 +1,40 @@
 import TRAINER from "../trainer.config.js";
 
+// 1. Agregamos el diccionario fuera de la función para que esté disponible
+const TYPE_EMOJIS = {
+    fire: "🔥", water: "💧", grass: "🌿", electric: "⚡", 
+    psychic: "🔮", ice: "❄️", fighting: "🥊", poison: "🧪", 
+    ground: "🏜️", flying: "🕊️", bug: "🐞", rock: "🪨", 
+    ghost: "👻", dragon: "🐲", dark: "🌑", steel: "⚙️", 
+    fairy: "✨", normal: "🔘"
+};
+
 export function render(state) {
     const { player, opponent, playerHP, playerMaxHP, opponentHP, opponentMaxHP, playerPosition, incomingAttack, phase, log, attackOnCooldown, definitiveUsed } = state;
 
     if (!player || !opponent) return;
 
+    // --- NUEVA LÓGICA DE NOMBRES CON EMOJI ---
+    const pNameEl = document.getElementById("p-name");
+    const oNameEl = document.getElementById("o-name");
+
+    if (pNameEl) {
+        // Buscamos el tipo: puede venir como objeto de API o como string directo
+        const pType = player.types?.[0]?.type?.name || player.types?.[0];
+        pNameEl.textContent = `${player.name.toUpperCase()} ${TYPE_EMOJIS[pType] || ""}`;
+    }
+    if (oNameEl) {
+        const oType = opponent.types?.[0]?.type?.name || opponent.types?.[0];
+        oNameEl.textContent = `${opponent.name.toUpperCase()} ${TYPE_EMOJIS[oType] || ""}`;
+    }
+
+    // --- CONTINUACIÓN DE TU CÓDIGO ORIGINAL (SIN CAMBIOS) ---
     document.getElementById("player-hp-fill").style.width = `${(playerHP / playerMaxHP) * 100}%`;
     document.getElementById("opponent-hp-fill").style.width = `${(opponentHP / opponentMaxHP) * 100}%`;
-    document.getElementById("player-hp-text").textContent = `${Math.ceil(playerHP)} / ${playerMaxHP}`;
-    document.getElementById("opponent-hp-text").textContent = `${Math.ceil(opponentHP)} / ${opponentMaxHP}`;
+    
+    // Agregamos el ❤️ aquí como pediste
+    document.getElementById("player-hp-text").textContent = `❤️ ${Math.ceil(playerHP)} / ${playerMaxHP}`;
+    document.getElementById("opponent-hp-text").textContent = `❤️ ${Math.ceil(opponentHP)} / ${opponentMaxHP}`;
 
     const cells = document.querySelectorAll(".cell");
     cells.forEach((cell, index) => {
@@ -44,17 +70,13 @@ export function render(state) {
             const btn = document.createElement("button");
             btn.className = "move-btn";
             btn.dataset.moveName = move.name;
-            
-            // Obtenemos el poder del movimiento
             const power = move.power || 60;
             btn.dataset.power = power;
 
-            // NUEVA EDICIÓN: Agregamos el daño visualmente
             btn.innerHTML = `
                 <span>⚔️ ${move.name.toUpperCase()}</span>
                 <small style="display: block; font-size: 0.7rem; color: #f2d33b; margin-top: 4px;">Daño: ${power}</small>
             `;
-            
             movesGrid.appendChild(btn);
         });
         document.getElementById("special-move-btn").textContent = `🌊 ${TRAINER.definitiveMoveName.toUpperCase()}`;
