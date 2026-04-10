@@ -34,11 +34,14 @@ function handleKeyDown(e) {
 }
 
 function triggerDamageEffect(isPlayer) {
+    // Usamos requestAnimationFrame para asegurar que el DOM esté listo
     requestAnimationFrame(() => {
         const id = isPlayer ? "player-sprite" : "opponent-sprite";
         const el = document.getElementById(id);
         
+        //solo actuamos si el elemento existe
         if (el) {
+            //parpadeo y movimiento al impacto
             el.classList.add("dmg-shake");
             
             const xMark = document.createElement("div");
@@ -49,6 +52,8 @@ function triggerDamageEffect(isPlayer) {
 
             setTimeout(() => {
                 if (el) el.classList.remove("dmg-shake");
+                
+                // Remueve la "X" del DOM
                 if (xMark.parentNode) xMark.parentNode.removeChild(xMark);
             }, 500);
         }
@@ -74,14 +79,27 @@ function startCooldown(duration, btn) {
     const start = performance.now();
     state.attackOnCooldown = true;
     render(state);
+
     function tick(now) {
         const elapsed = now - start;
         const pct = Math.min(elapsed / duration, 1);
         let bar = btn.querySelector(".cooldown-overlay") || document.createElement("div");
-        if (!bar.classList.contains("cooldown-overlay")) { bar.className = "cooldown-overlay"; btn.appendChild(bar); }
+        
+        if (!bar.classList.contains("cooldown-overlay")) { 
+            bar.className = "cooldown-overlay"; 
+            btn.appendChild(bar); 
+        }
+
         bar.style.width = `${(1 - pct) * 100}%`;
-        if (pct < 1 && state.phase === 'fighting') { requestAnimationFrame(tick); }
-        else { state.attackOnCooldown = false; if (bar.parentNode) btn.removeChild(bar); render(state); }
+
+        // CORRECCIÓN: Si la batalla termina, forzamos la limpieza del cooldown
+        if (pct < 1 && state.phase === 'fighting') { 
+            requestAnimationFrame(tick); 
+        } else { 
+            state.attackOnCooldown = false; 
+            if (bar.parentNode) bar.remove(); 
+            render(state); 
+        }
     }
     requestAnimationFrame(tick);
 }
@@ -99,14 +117,21 @@ function handleSpecialAttack() {
 function scheduleEnemyAttack() {
     if (state.phase !== 'fighting') return;
     const delay = (Math.random() * 2 + 1.5) * 1000;
+    
     const t = setTimeout(async () => {
+        // CORRECCIÓN: Si la batalla terminó mientras esperábamos el delay, abortamos
+        if (state.phase !== 'fighting') return;
+
         const target = Math.floor(Math.random() * 3) + 1;
         state.incomingAttack = target;
         render(state);
         await wait(400);
+        
+        if (state.phase !== 'fighting') return; // Re-verificar tras el wait
+
         state.locked = true;
         render(state);
-        
+
         if (state.playerPosition === target) {
             const enemyStatAtk = state.opponent.stats.find(s => s.stat.name === "attack").base_stat;
             const dmg = formulas.enemyAttack(enemyStatAtk);

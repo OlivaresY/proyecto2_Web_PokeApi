@@ -100,20 +100,23 @@ searchInput.addEventListener("input", (e) => {
 // Busca tu evento click del battleBtn y asegúrate que luzca así:
 battleBtn.addEventListener("click", () => {
     if (!state.player || !state.opponent) return;
+    
+    const filterMoves = (moves) => moves
+        .filter(m => m.status === "fulfilled")
+        .map(m => m.value);
 
     const battleData = { 
         player: {
             name: state.player.name,
             sprites: state.player.sprites,
             stats: state.player.stats,
-            // Extraemos los datos ya resueltos de los movimientos
-            movesInfo: state.player.movesInfo.map(m => m.value || m)
+            movesInfo: filterMoves(state.player.movesInfo)
         },
         opponent: {
             name: state.opponent.name,
             sprites: state.opponent.sprites,
             stats: state.opponent.stats,
-            movesInfo: state.opponent.movesInfo.map(m => m.value || m)
+            movesInfo: filterMoves(state.opponent.movesInfo)
         }
     };
 

@@ -1,4 +1,3 @@
-import TRAINER from "../trainer.config.js";
 
 export const state = {
     player: null,
@@ -20,10 +19,10 @@ export const state = {
 export const formulas = {
     playerAttack: (power) => {
         const p = power || 60;
-        return Math.floor(p * 0.3) + Math.floor(Math.random() * p * 0.4);
+        return Math.floor(Math.floor(p * 0.3) + Math.floor(Math.random() * p * 0.4));
     },
     enemyAttack: (stat) => {
-        return Math.floor(stat * 0.4) + Math.floor(Math.random() * 20);
+        return Math.floor(Math.floor(stat * 0.4) + Math.floor(Math.random() * 20));
     }
 };
 
