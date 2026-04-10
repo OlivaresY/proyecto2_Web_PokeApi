@@ -5,20 +5,18 @@ export function render(state) {
 
     if (!player || !opponent) return;
 
-    // 1. Barras de Vida
     document.getElementById("player-hp-fill").style.width = `${(playerHP / playerMaxHP) * 100}%`;
     document.getElementById("opponent-hp-fill").style.width = `${(opponentHP / opponentMaxHP) * 100}%`;
     document.getElementById("player-hp-text").textContent = `${Math.ceil(playerHP)} / ${playerMaxHP}`;
     document.getElementById("opponent-hp-text").textContent = `${Math.ceil(opponentHP)} / ${opponentMaxHP}`;
 
-    // 2. Grid y Sprites
     const cells = document.querySelectorAll(".cell");
     cells.forEach((cell, index) => {
         const cellIndex = index + 1;
         cell.innerHTML = "";
         cell.classList.remove("warning");
 
-        if (cellIndex === 2) { // Oponente
+        if (cellIndex === 2) {
             const img = document.createElement("img");
             img.id = "opponent-sprite";
             img.src = opponent.sprites.versions?.['generation-v']?.['black-white']?.animated?.front_default || opponent.sprites.front_default;
@@ -26,7 +24,7 @@ export function render(state) {
             cell.appendChild(img);
         }
 
-        if (cellIndex === playerPosition + 3) { // Jugador
+        if (cellIndex === playerPosition + 3) {
             const img = document.createElement("img");
             img.id = "player-sprite";
             img.src = player.sprites.versions?.['generation-v']?.['black-white']?.animated?.back_default || player.sprites.back_default || player.sprites.front_default;
@@ -39,7 +37,6 @@ export function render(state) {
         }
     });
 
-    // 3. Botones (Se crean solo una vez)
     const movesGrid = document.getElementById("normal-moves");
     if (movesGrid && movesGrid.innerHTML === "") {
         player.movesInfo.slice(0, 4).forEach(move => {
@@ -53,16 +50,13 @@ export function render(state) {
         document.getElementById("special-move-btn").textContent = `🌟 ${TRAINER.definitiveMoveName.toUpperCase()}`;
     }
 
-    // Bloqueos de botones
     document.querySelectorAll(".move-btn").forEach(b => b.disabled = (attackOnCooldown || phase === 'ended'));
     document.getElementById("special-move-btn").disabled = (attackOnCooldown || definitiveUsed || phase === 'ended');
 
-    // 4. Log
     const logBox = document.getElementById("battle-log");
     logBox.innerHTML = log.map(m => `<p>> ${m}</p>`).join("");
     logBox.scrollTop = logBox.scrollHeight;
 
-    // 5. Pantalla Final
     if (phase === 'ended' && !document.querySelector(".battle-over")) {
         const isWin = playerHP > 0;
         const div = document.createElement("div");

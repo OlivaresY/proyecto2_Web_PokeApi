@@ -31,12 +31,27 @@ function handleKeyDown(e) {
 }
 
 function triggerDamageEffect(isPlayer) {
-    const id = isPlayer ? "player-sprite" : "opponent-sprite";
-    const el = document.getElementById(id);
-    if (el) {
-        el.classList.add("dmg-shake");
-        setTimeout(() => el.classList.remove("dmg-shake"), 500);
-    }
+    // requestAnimationFrame asegura que el render() previo ya terminó de dibujar
+    requestAnimationFrame(() => {
+        const id = isPlayer ? "player-sprite" : "opponent-sprite";
+        const el = document.getElementById(id);
+        
+        if (el) {
+            el.classList.add("dmg-shake");
+            
+            const xMark = document.createElement("div");
+            xMark.className = "damage-x";
+            xMark.textContent = "✘";
+            
+            // Se añade a la celda (el contenedor del sprite)
+            el.parentElement.appendChild(xMark);
+
+            setTimeout(() => {
+                if (el) el.classList.remove("dmg-shake");
+                if (xMark.parentNode) xMark.parentNode.removeChild(xMark);
+            }, 500);
+        }
+    });
 }
 
 function handlePlayerAttack(e) {
@@ -47,10 +62,11 @@ function handlePlayerAttack(e) {
     state.opponentHP = Math.max(0, state.opponentHP - damage);
     state.log.push(`¡${state.player.name} usó ${btn.dataset.moveName.toUpperCase()}! Daño: ${damage}`);
     
-    triggerDamageEffect(false); // Efecto en el oponente
+    render(state); 
+    triggerDamageEffect(false); 
+    
     startCooldown(2500, btn);
     checkBattleEnd();
-    render(state);
 }
 
 function startCooldown(duration, btn) {
@@ -73,15 +89,15 @@ function handleSpecialAttack() {
     if (state.phase !== 'fighting' || state.definitiveUsed) return;
     state.definitiveUsed = true;
     state.opponentHP = 0;
+    render(state);
     triggerDamageEffect(false);
     state.log.push(`¡${TRAINER.definitiveMoveName.toUpperCase()}! ${TRAINER.definitiveMoveFlavor}`);
     checkBattleEnd();
-    render(state);
 }
 
 function scheduleEnemyAttack() {
     if (state.phase !== 'fighting') return;
-    const delay = (Math.random() * 7 + 3) * 1000;
+    const delay = (Math.random() * 5 + 2) * 1000;
     const t = setTimeout(async () => {
         const target = Math.floor(Math.random() * 3) + 1;
         state.incomingAttack = target;
@@ -92,7 +108,8 @@ function scheduleEnemyAttack() {
         if (state.playerPosition === target) {
             const dmg = formulas.enemyAttack(state.opponent.stats.find(s => s.stat.name === "attack").base_stat);
             state.playerHP = Math.max(0, state.playerHP - dmg);
-            triggerDamageEffect(true); // Efecto en el jugador
+            render(state);
+            triggerDamageEffect(true);
             state.log.push(`¡Golpe enemigo! -${dmg} HP`);
         } else { state.log.push(`¡Esquivado!`); }
         state.incomingAttack = null; state.locked = false;
@@ -106,6 +123,7 @@ function checkBattleEnd() {
     if (state.playerHP <= 0 || state.opponentHP <= 0) {
         state.phase = 'ended';
         state.timers.forEach(clearTimeout);
+        render(state);
     }
 }
 

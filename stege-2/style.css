@@ -17,7 +17,7 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
 .cell { background: #15294b; border: 2px solid #3a69af; border-radius: 10px; display: flex; justify-content: center; align-items: center; position: relative; }
 .cell.warning { background: rgba(239, 68, 68, 0.3); border-color: #ef4444; box-shadow: 0 0 15px #ef4444; }
 
-.sprite { width: 90px; height: 90px; object-fit: contain; }
+.sprite { width: 90px; height: 90px; object-fit: contain; position: relative; z-index: 5; }
 
 /* Controles */
 .battle-controls { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
@@ -34,21 +34,39 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
 .log-content { padding: 10px; height: 140px; overflow-y: auto; font-size: 0.85rem; color: #cbd5e1; }
 
 /* Pantalla Final */
-.battle-over { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 100; }
+.battle-over { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 1000; }
 .end-card { background: #15294b; border: 3px solid #f2d33b; padding: 40px; border-radius: 15px; text-align: center; }
 
-/* Animación de parpadeo para recibir daño */
+/* --- EFECTOS DE DAÑO (CORE) --- */
 @keyframes shake {
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    100% { transform: translate(0px, 0px) rotate(0deg); }
+    0% { transform: translate(1px, 1px); }
+    20% { transform: translate(-3px, 0px); }
+    40% { transform: translate(1px, -1px); }
+    60% { transform: translate(-1px, 2px); }
+    100% { transform: translate(0px, 0px); }
 }
 
 .dmg-shake {
-    animation: shake 0.5s;
-    filter: brightness(0.5) sepia(1) hue-rotate(-50deg); /* Efecto rojizo */
+    animation: shake 0.4s;
+    filter: brightness(1.8) drop-shadow(0 0 15px red);
+}
+
+.damage-x {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ef4444;
+    font-size: 7rem;
+    font-weight: bold;
+    pointer-events: none;
+    z-index: 999;
+    text-shadow: 0 0 20px black;
+    animation: x-anim 0.5s ease-out forwards;
+}
+
+@keyframes x-anim {
+    0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0; }
+    50% { opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
 }
