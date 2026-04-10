@@ -70,3 +70,23 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
     50% { opacity: 1; }
     100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
 }
+
+.vs-mini {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #f2d33b;
+    text-shadow: 0 0 5px #ff4500, 0 0 10px #ff0000;
+    animation: flamePulse 1.5s infinite alternate ease-in-out;
+    display: inline-block; /* Para que la animación de escala funcione bien */
+}
+
+@keyframes flamePulse {
+    0% {
+        text-shadow: 0 0 5px #ff4500, 0 0 10px #ff0000;
+        transform: scale(1);
+    }
+    100% {
+        text-shadow: 0 0 10px #ff8c00, 0 0 20px #ff4500, 0 0 5px #fff;
+        transform: scale(1.2);
+    }
+}

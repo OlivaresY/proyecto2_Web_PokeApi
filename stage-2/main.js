@@ -4,7 +4,6 @@ import { render } from "./render.js";
 
 async function init() {
     const data = JSON.parse(localStorage.getItem("battleData"));
-    // Si no hay datos, redirige al Stage 1
     if (!data) { 
         window.location.href = "../index.html"; 
         return; 
@@ -99,16 +98,15 @@ function handleSpecialAttack() {
 
 function scheduleEnemyAttack() {
     if (state.phase !== 'fighting') return;
-    const delay = (Math.random() * 5 + 2) * 1000;
+    const delay = (Math.random() * 2 + 1.5) * 1000;
     const t = setTimeout(async () => {
         const target = Math.floor(Math.random() * 3) + 1;
         state.incomingAttack = target;
         render(state);
-        await wait(600);
+        await wait(400);
         state.locked = true;
         render(state);
         
-        // CORRECCIÓN AQUÍ: Restamos daño al playerHP, no recalculamos el MaxHP
         if (state.playerPosition === target) {
             const enemyStatAtk = state.opponent.stats.find(s => s.stat.name === "attack").base_stat;
             const dmg = formulas.enemyAttack(enemyStatAtk);
@@ -117,7 +115,7 @@ function scheduleEnemyAttack() {
             triggerDamageEffect(true);
             state.log.push(`¡Golpe enemigo! -${dmg} HP`);
         } else { 
-            state.log.push(`¡Esquivado!`); 
+            state.log.push(`¡Ataque esquivado!`);
         }
         
         state.incomingAttack = null; 
