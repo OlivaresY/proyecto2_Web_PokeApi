@@ -96,19 +96,32 @@ searchInput.addEventListener("input", (e) => {
     }, 800); 
 });
 
+// En tu main.js del STAGE 1
+// Busca tu evento click del battleBtn y asegúrate que luzca así:
 battleBtn.addEventListener("click", () => {
     if (!state.player || !state.opponent) return;
 
-    const cleanPlayerMoves = state.player.movesInfo.map(res => res.value || res);
-    const cleanOpponentMoves = state.opponent.movesInfo.map(res => res.value || res);
-
     const battleData = { 
-        player: { ...state.player, movesInfo: cleanPlayerMoves }, 
-        opponent: { ...state.opponent, movesInfo: cleanOpponentMoves } 
+        player: {
+            name: state.player.name,
+            sprites: state.player.sprites,
+            stats: state.player.stats,
+            // Extraemos los datos ya resueltos de los movimientos
+            movesInfo: state.player.movesInfo.map(m => m.value || m)
+        },
+        opponent: {
+            name: state.opponent.name,
+            sprites: state.opponent.sprites,
+            stats: state.opponent.stats,
+            movesInfo: state.opponent.movesInfo.map(m => m.value || m)
+        }
     };
 
+    // Guardamos la información
     localStorage.setItem("battleData", JSON.stringify(battleData));
-    window.location.href = "./stage-2/index.html"; 
+    
+    // NAVEGACIÓN: Asegúrate de que esta ruta sea correcta según tus carpetas
+    window.location.href = "../stage-2/index.html"; 
 });
 
 init();

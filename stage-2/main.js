@@ -4,7 +4,11 @@ import { render } from "./render.js";
 
 async function init() {
     const data = JSON.parse(localStorage.getItem("battleData"));
-    if (!data) { window.location.href = "../index.html"; return; }
+    // Si no hay datos, redirige al Stage 1
+    if (!data) { 
+        window.location.href = "../index.html"; 
+        return; 
+    }
 
     state.player = data.player;
     state.opponent = data.opponent;
@@ -31,7 +35,6 @@ function handleKeyDown(e) {
 }
 
 function triggerDamageEffect(isPlayer) {
-    // requestAnimationFrame asegura que el render() previo ya terminó de dibujar
     requestAnimationFrame(() => {
         const id = isPlayer ? "player-sprite" : "opponent-sprite";
         const el = document.getElementById(id);
@@ -43,7 +46,6 @@ function triggerDamageEffect(isPlayer) {
             xMark.className = "damage-x";
             xMark.textContent = "✘";
             
-            // Se añade a la celda (el contenedor del sprite)
             el.parentElement.appendChild(xMark);
 
             setTimeout(() => {
@@ -105,15 +107,24 @@ function scheduleEnemyAttack() {
         await wait(600);
         state.locked = true;
         render(state);
+        
+        // CORRECCIÓN AQUÍ: Restamos daño al playerHP, no recalculamos el MaxHP
         if (state.playerPosition === target) {
-            const dmg = formulas.enemyAttack(state.opponent.stats.find(s => s.stat.name === "attack").base_stat);
-            state.playerHP = Math.max(0, state.playerHP - dmg);
+            const enemyStatAtk = state.opponent.stats.find(s => s.stat.name === "attack").base_stat;
+            const dmg = formulas.enemyAttack(enemyStatAtk);
+            state.playerHP = Math.max(0, state.playerHP - dmg); 
             render(state);
             triggerDamageEffect(true);
             state.log.push(`¡Golpe enemigo! -${dmg} HP`);
-        } else { state.log.push(`¡Esquivado!`); }
-        state.incomingAttack = null; state.locked = false;
-        checkBattleEnd(); render(state);
+        } else { 
+            state.log.push(`¡Esquivado!`); 
+        }
+        
+        state.incomingAttack = null; 
+        state.locked = false;
+        checkBattleEnd(); 
+        render(state);
+        
         if (state.phase === 'fighting') scheduleEnemyAttack();
     }, delay);
     state.timers.push(t);

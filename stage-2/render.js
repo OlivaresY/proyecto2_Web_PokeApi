@@ -37,18 +37,21 @@ export function render(state) {
         }
     });
 
-    const movesGrid = document.getElementById("normal-moves");
-    if (movesGrid && movesGrid.innerHTML === "") {
-        player.movesInfo.slice(0, 4).forEach(move => {
-            const btn = document.createElement("button");
-            btn.className = "move-btn";
-            btn.dataset.moveName = move.name;
-            btn.dataset.power = move.power || 60;
-            btn.innerHTML = `⚔️ ${move.name.toUpperCase()}`;
-            movesGrid.appendChild(btn);
-        });
-        document.getElementById("special-move-btn").textContent = `🌟 ${TRAINER.definitiveMoveName.toUpperCase()}`;
-    }
+    // --- CORRECCIÓN EN RENDER.JS ---
+const movesGrid = document.getElementById("normal-moves");
+if (movesGrid && movesGrid.innerHTML === "") {
+    const movesToRender = player.movesInfo || []; 
+    movesToRender.slice(0, 4).forEach(move => {
+        const btn = document.createElement("button");
+        btn.className = "move-btn";
+        btn.dataset.moveName = move.name;
+        btn.dataset.power = move.power || 60;
+        btn.innerHTML = `⚔️ ${move.name.toUpperCase()}`;
+        movesGrid.appendChild(btn);
+    });
+    // ¡Aquí faltaba cerrar bien el bloque del IF antes de seguir!
+    document.getElementById("special-move-btn").textContent = `🌟 ${TRAINER.definitiveMoveName.toUpperCase()}`;
+}
 
     document.querySelectorAll(".move-btn").forEach(b => b.disabled = (attackOnCooldown || phase === 'ended'));
     document.getElementById("special-move-btn").disabled = (attackOnCooldown || definitiveUsed || phase === 'ended');
