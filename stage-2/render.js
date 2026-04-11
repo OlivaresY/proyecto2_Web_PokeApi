@@ -88,17 +88,20 @@ export function render(state) {
 
         // Jugador (Fila inferior, celdas 4, 5, 6)
         if (cellIndex === playerPosition + 3) {
-    let img = cell.querySelector("#player-sprite");
-    if (!img) {
-        img = document.createElement("img");
-        img.id = "player-sprite";
-        img.className = "sprite";
-        cell.appendChild(img);
-    }
+    const img = document.createElement("img");
+    img.id = "player-sprite"; // 🔥 IMPORTANTE para efectos
+    img.className = "sprite";
     img.src = player.sprites.versions?.['generation-v']?.['black-white']?.animated?.back_default 
         || player.sprites.back_default 
         || player.sprites.front_default;
+
+    cell.appendChild(img);
 }
+
+        if (incomingAttack && cellIndex === incomingAttack + 3) {
+            cell.classList.add("warning");
+        }
+    });
 
     // --- 5. CONTROLES ---
     const movesGrid = document.getElementById("normal-moves");
