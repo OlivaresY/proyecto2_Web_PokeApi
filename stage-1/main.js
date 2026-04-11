@@ -34,7 +34,7 @@ async function init() {
     document.getElementById("trainer-name").textContent = `🎒 ${TRAINER.name}`;
     document.getElementById("trainer-town").textContent = `🌳 ${TRAINER.hometown}`;
     document.getElementById("trainer-phrase").textContent = `💬 ${TRAINER.catchphrase}`;
-
+    
     if(oppName) oppName.textContent = "🎒 DESCONOCIDO";
     if(oppTown) oppTown.textContent = "🌳 DESCONOCIDO";
     if(oppPhrase) oppPhrase.textContent = "💬 DESCONOCIDO";
@@ -96,8 +96,7 @@ searchInput.addEventListener("input", (e) => {
     }, 800); 
 });
 
-// En tu main.js del STAGE 1
-// Busca tu evento click del battleBtn y asegúrate que luzca así:
+// CORRECCIÓN EN STAGE 1 (main.js)
 battleBtn.addEventListener("click", () => {
     if (!state.player || !state.opponent) return;
     
@@ -110,20 +109,21 @@ battleBtn.addEventListener("click", () => {
             name: state.player.name,
             sprites: state.player.sprites,
             stats: state.player.stats,
+            // Guardamos un array simple de strings: ["water", "poison"]
+            types: state.player.types.map(t => t.type.name), 
             movesInfo: filterMoves(state.player.movesInfo)
         },
         opponent: {
             name: state.opponent.name,
             sprites: state.opponent.sprites,
             stats: state.opponent.stats,
+            // ✅ CORREGIDO: Ahora usa state.opponent
+            types: state.opponent.types.map(t => t.type.name), 
             movesInfo: filterMoves(state.opponent.movesInfo)
         }
     };
 
-    // Guardamos la información
     localStorage.setItem("battleData", JSON.stringify(battleData));
-    
-    // NAVEGACIÓN: Asegúrate de que esta ruta sea correcta según tus carpetas
     window.location.href = "../stage-2/index.html"; 
 });
 

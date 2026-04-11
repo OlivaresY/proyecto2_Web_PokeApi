@@ -9,10 +9,72 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
 
 .battle-container { width: 95%; max-width: 850px; display: flex; flex-direction: column; gap: 20px; }
 
-/* Cabecera y Barras */
-.battle-header { display: flex; justify-content: space-between; align-items: center; background: #15294b; padding: 15px; border: 2px solid #3a69af; border-radius: 12px; }
-.hp-section { width: 40%; }
-.name-label { display: block; font-weight: bold; color: #f2d33b; margin-bottom: 5px; text-transform: uppercase; }
+/* --- NUEVO ESTILO AZUL ACERO (REEMPLAZA LAS QUE TIENES) --- */
+
+/* --- NUEVA CABECERA DE HP CON MÁS VIDA Y RESPLANDOR NEÓN --- */
+
+.battle-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    
+    /* MODIFICADO: Gradiente mucho más luminoso y vibrante */
+    background: linear-gradient(180deg, #3a557a 0%, #213550 100%); 
+    
+    padding: 20px; 
+    
+    /* MODIFICADO: Borde más claro para que resalte */
+    border: 3px solid #6c88b0; 
+    
+    border-radius: 15px; 
+    
+    /* MODIFICADO: Sombra externa potente y sombra interna para brillo neón */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 
+                inset 0 0 20px rgba(255, 255, 255, 0.1); 
+    
+    /* AÑADIDO: Efecto de resplandor general de energía azul */
+    animation: headerEnergyPulse 3s infinite alternate;
+}
+
+.hp-section { 
+    width: 43%; 
+    padding: 10px;
+    
+    /* MODIFICADO: Fondo interno oscuro pero con transparencia elegante */
+    background: rgba(0, 0, 0, 0.25); 
+    
+    border-radius: 12px;
+    
+    /* Este borde izquierdo brillará con el color del tipo gracias al JS */
+    border-left: 5px solid #3a69af; 
+    
+    /* MODIFICADO: Brillo neón interno suave (el JS lo hará dinámico) */
+    box-shadow: inset 0 0 15px rgba(58, 105, 175, 0.3);
+    
+    transition: all 0.3s ease-out;
+}
+
+.name-label { 
+    display: block; 
+    font-weight: 900; 
+    
+    /* MODIFICADO: Amarillo más intenso y saturado */
+    color: #ffeb3b; 
+    
+    margin-bottom: 8px; 
+    text-transform: uppercase; 
+    
+    /* MODIFICADO: Sombra de texto nítida para contraste perfecto */
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7),
+                 0 0 8px rgba(255, 235, 59, 0.5); /* Resplandor amarillo suave */
+}
+
+/* AÑADIDO: Animación de pulso de energía para la cabecera */
+@keyframes headerEnergyPulse {
+    0% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(255, 255, 255, 0.1); }
+    100% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(108, 136, 176, 0.3); }
+}
+
 /* Grid 3x2 */
 .arena { display: flex; justify-content: center; }
 .grid { display: grid; grid-template-columns: repeat(3, 130px); grid-template-rows: repeat(2, 130px); gap: 12px; }
