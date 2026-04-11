@@ -9,20 +9,26 @@
 
 <main class="battle-container">
     <header class="battle-header">
-        <div class="hp-section">
-            <span id="p-name" class="name-label">TU POKÉMON</span>
-            <div class="hp-bar"><div id="player-hp-fill" class="hp-fill"></div></div>
-            <span id="player-hp-text">0/0</span>
+    <div class="hp-section">
+        <span id="p-name" class="name-label">TU POKÉMON</span>
+        <div class="hp-bar">
+            <div id="player-damage-fill" class="damage-fill" style="width: 100%;"></div>
+            <div id="player-hp-fill" class="hp-fill" style="width: 100%;"></div>
         </div>
-        
-        <div class="vs-mini">VS</div>
+        <span id="player-hp-text">0/0</span>
+    </div>
+    
+    <div class="vs-mini">VS</div>
 
-        <div class="hp-section">
-            <span id="o-name" class="name-label">OPONENTE</span>
-            <div class="hp-bar"><div id="opponent-hp-fill" class="hp-fill"></div></div>
-            <span id="opponent-hp-text">0/0</span>
+    <div class="hp-section">
+        <span id="o-name" class="name-label">OPONENTE</span>
+        <div class="hp-bar">
+            <div id="opponent-damage-fill" class="damage-fill" style="width: 100%;"></div>
+            <div id="opponent-hp-fill" class="hp-fill" style="width: 100%;"></div>
         </div>
-    </header>
+        <span id="opponent-hp-text">0/0</span>
+    </div>
+</header>
 
     <section class="arena">
         <div class="grid" id="battle-grid">
