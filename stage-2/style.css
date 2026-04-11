@@ -24,14 +24,136 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
 
 .sprite { width: 90px; height: 90px; object-fit: contain; position: relative; z-index: 5; }
 
-/* Controles */
-.battle-controls { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
-.moves-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.move-btn { background: #15294b; color: #f2d33b; border: 2px solid #f2d33b; padding: 12px; font-weight: bold; border-radius: 8px; cursor: pointer; position: relative; overflow: hidden; }
-.move-btn:hover { background: #1e3a6d; }
-.cooldown-overlay { position: absolute; top: 0; left: 0; height: 100%; background: rgba(0,0,0,0.5); }
+/* --- CONTROLES: ESTILO VIBRANTE (IMAGEN 2) PERO TAMAÑO ORIGINAL --- */
+/* --- CONTROLES: RELIEVE 3D Y BOTÓN ESPECIAL VIBRANTE --- */
+.battle-controls { 
+    display: grid; 
+    grid-template-columns: 1.2fr 0.8fr; 
+    gap: 20px; 
+}
 
-.special-btn { width: 100%; margin-top: 8px; padding: 15px; background: #15294b; border: 2px solid #a855f7; color: #a855f7; font-weight: bold; border-radius: 8px; cursor: pointer; box-shadow: 0 0 10px rgba(168, 85, 247, 0.4); }
+.moves-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 10px; /* Un pelín más de aire entre botones */
+}
+
+/* Botones de ataque normales: Más "levantados" */
+
+.move-btn { 
+    background: linear-gradient(180deg, #f2d33b 0%, #d4b834 100%); 
+    color: #0b0f1a; /* color base (no morado aquí) */
+    border: 2px solid #000000; 
+    padding: 12px; 
+    font-weight: 900; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    position: relative; 
+    overflow: hidden; 
+    text-transform: uppercase;
+    box-shadow: 0 4px 0 #000000, inset 0 2px 0 rgba(255,255,255,0.5);
+    transition: all 0.1s ease;
+    transform: translateY(-2px);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.move-name {
+    color: #8c52ff !important; /* morado */
+    display: block;
+}
+
+.move-damage {
+    color: #000000 !important; /* negro */
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.move-btn:hover { 
+    background: linear-gradient(180deg, #ffe95a 0%, #f2d33b 100%);
+    transform: translateY(-4px); 
+    box-shadow: 0 6px 0 #000000, inset 0 2px 0 rgba(255,255,255,0.5);
+}
+
+.move-btn:active {
+    transform: translateY(2px); 
+    box-shadow: 0 0 0 #000000, inset 0 2px 5px rgba(0,0,0,0.2);
+}
+
+
+/* --- BOTÓN ESPECIAL: MÁXIMA VIBRACIÓN --- */
+/* --- BOTÓN ESPECIAL: TEXTO ROJO DINÁMICO --- */
+.special-btn { 
+    width: 100%; 
+    margin-top: 8px; 
+    padding: 16px; 
+    
+    /* Fondo oscuro para que las letras rojas resalten al inicio */
+    background: linear-gradient(180deg, #1a1a1a 0%, #000000 100%);
+    
+    /* LETRAS ROJAS (Estado inicial) */
+    color: #ff0000; 
+    
+    border: 2px solid #ff0000; /* Borde rojo a juego */
+    font-weight: 900; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+    /* Sombra de apoyo */
+    box-shadow: 0 4px 0 #660000, 0 0 10px rgba(255, 0, 0, 0.2);
+    
+    /* Animación de pulso suave en el borde/sombra */
+    animation: specialGlow 1.5s infinite alternate;
+    
+    transition: all 0.2s ease;
+    transform: translateY(-2px);
+}
+
+/* Cuando el mouse pasa por encima (Hover) */
+.special-btn:hover {
+    /* El fondo se vuelve rojo vibrante */
+    background: linear-gradient(180deg, #ff1a1a 0%, #cc0000 100%);
+    
+    /* LAS LETRAS SE MANTIENEN ROJAS (o un rojo más intenso/blanco para legibilidad) */
+    /* Como pediste que se vuelvan rojas al pasar el mouse también: */
+    color: #ffffff; /* Sugerencia: Blanco o Amarillo para que se lea sobre el fondo rojo */
+    /* Si las quieres estrictamente rojas sobre fondo rojo, usa un rojo muy oscuro: */
+    /* color: #4b0000; */
+    
+    border-color: #ffffff;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 6px 0 #800000, 0 0 25px rgba(255, 0, 0, 0.6);
+}
+
+.special-btn:active {
+    transform: translateY(2px) scale(0.98);
+    box-shadow: 0 0 0 #800000;
+}
+
+/* Animación de brillo para el botón especial */
+@keyframes specialGlow {
+    0% { 
+        box-shadow: 0 4px 0 #660000, 0 0 5px rgba(255, 0, 0, 0.3); 
+    }
+    100% { 
+        box-shadow: 0 4px 0 #660000, 0 0 20px rgba(255, 0, 0, 0.7); 
+    }
+}
+
+/* Cooldown ajustado */
+.cooldown-overlay { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    height: 100%; 
+    background: rgba(255, 255, 255, 0.4); 
+    z-index: 1;
+}
 
 /* Log */
 .log-panel { background: #15294b; border: 1px solid #3a69af; border-radius: 8px; overflow: hidden; }

@@ -73,9 +73,10 @@ export function render(state) {
             const power = move.power || 60;
             btn.dataset.power = power;
 
+            // Dentro de tu función render:
             btn.innerHTML = `
-                <span>⚔️ ${move.name.toUpperCase()}</span>
-                <small style="display: block; font-size: 0.7rem; color: #f2d33b; margin-top: 4px;">Daño: ${power}</small>
+                <span class="move-name">⚔️ ${move.name.toUpperCase()}</span>
+                <small class="move-damage">Daño: ${power}</small>
             `;
             movesGrid.appendChild(btn);
         });
