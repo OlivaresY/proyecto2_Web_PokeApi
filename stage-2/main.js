@@ -165,28 +165,12 @@ function checkBattleEnd() {
     if (state.playerHP <= 0 || state.opponentHP <= 0) {
         state.phase = 'ended';
         
-        // Detener ataques y eventos
+        // 1. Detener ataques y eventos
         state.timers.forEach(clearTimeout);
         document.removeEventListener('keydown', handleKeyDown);
 
-        const isVictory = state.opponentHP <= 0;
-        const message = isVictory ? "¡VICTORIA!" : "DERROTA";
-        const flavor = isVictory ? "¡Eres un maestro Pokémon!" : "Tu equipo necesita descansar...";
-
-        // Crear la pantalla flotante
-        const overlay = document.createElement('div');
-        overlay.className = 'battle-over';
-        
-        // Inyectamos el HTML asegurando que el botón use la clase btn-volver
-        overlay.innerHTML = `
-            <div class="end-card">
-                <h2>${message}</h2>
-                <p style="margin-bottom: 20px; color: #cbd5e1;">${flavor}</p>
-                <a href="../index.html" class="btn-volver">VOLVER AL INICIO</a>
-            </div>
-        `;
-        
-        document.body.appendChild(overlay);
+        // 2. Solo llamamos a render
+        // El archivo render.js ya tiene la lógica para pintar el cartel
         render(state);
     }
 }

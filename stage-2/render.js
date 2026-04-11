@@ -33,9 +33,10 @@ const getTypes = (pokemon) => {
     }).filter(Boolean);
 };
 
-// 🔥 Variables de vida previa
+// 🔥 Variables de control y vida previa
 let prevPlayerHP = null;
 let prevOpponentHP = null;
+let endScreenCreated = false; // Bandera de control para evitar duplicados
 
 export function render(state) {
     const {
@@ -219,20 +220,23 @@ export function render(state) {
     // =========================
     // 🏁 6. FINAL
     // =========================
-    if (phase === 'ended' && !document.querySelector(".battle-over")) {
-        const isWin = playerHP > 0;
+    if (phase === 'ended' && !endScreenCreated) {
+        if (!document.querySelector(".battle-over")) {
+            endScreenCreated = true; 
+            const isWin = playerHP > 0;
 
-        const div = document.createElement("div");
-        div.className = "battle-over";
+            const div = document.createElement("div");
+            div.className = "battle-over";
 
-        div.innerHTML = `
-            <div class="end-card">
-                <h2>${isWin ? '¡VICTORIA!' : 'DERROTA'}</h2>
-                <p>${isWin ? TRAINER.winMessage : TRAINER.loseMessage}</p>
-                <a href="../index.html" class="btn-volver">VOLVER AL INICIO</a>
-            </div>
-        `;
+            div.innerHTML = `
+                <div class="end-card">
+                    <h2>${isWin ? '¡VICTORIA!' : 'DERROTA'}</h2>
+                    <p>${isWin ? TRAINER.winMessage : TRAINER.loseMessage}</p>
+                    <a href="../index.html" class="btn-volver">VOLVER AL INICIO</a>
+                </div>
+            `;
 
-        document.body.appendChild(div);
+            document.body.appendChild(div);
+        }
     }
 }
