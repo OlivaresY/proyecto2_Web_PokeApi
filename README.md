@@ -1,106 +1,93 @@
-# Pokémon Battle
+# ⚔️ Pokémon Battle
 
 ## 🌐 Live Demo
-👉 [https://github.com/OlivaresY/proyecto2_Web_PokeApi](https://github.com/OlivaresY/proyecto2_Web_PokeApi)
+👉 https://www.loom.com/share/bff98b5bc5ea4b289bf1dba10cbacb34
 
 ---
 
-## 🧠 Mi Pokémon Favorito
-
-Elegí a **Golduck** porque siempre me ha llamado la atención su diseño y su conexión con habilidades psíquicas y acuáticas. Además, es un Pokémon que combina velocidad y ataque, lo cual lo hace ideal para un estilo de batalla dinámico.
-
----
-
-## 💥 Movimiento Definitivo
-
-**Nombre:** Tsunami Final  
-**Descripción:** Una ola gigante destruye todo a su paso, arrasando al oponente sin posibilidad de escape.
-
-**Inspiración:** Está inspirado en el poder del agua como fuerza imparable de la naturaleza, combinando el estilo agresivo de Golduck con un ataque visualmente impactante.
+## 🧠 Mi Pokémon Favorito: Golduck
+Elegí a **Golduck** porque representa el equilibrio perfecto entre elegancia y poder. Su conexión con habilidades psíquicas y acuáticas lo convierte en un luchador versátil. En este proyecto, personifica la agilidad necesaria para dominar el sistema de combate en tiempo real.
 
 ---
 
-## 🎨 Type Theming
+## 💥 Movimiento Definitivo (Ultimate)
+**Nombre:** Tsunami Final 🌊  
+**Descripción:** Una ola colosal envuelve el escenario, eliminando cualquier rastro de resistencia enemiga. Es una victoria técnica instantánea que limpia el tablero.
 
-El proyecto implementa un sistema de **colores dinámicos basados en el tipo principal del Pokémon** obtenido desde la API.
-
-- El **jugador** aplica el color dinámico según su Pokémon favorito (requerimiento obligatorio).
-- El **oponente** también aplica un color dinámico según su tipo.
-
-👉 Aunque el requisito solo exigía el theming para el jugador, decidí extenderlo al oponente para mejorar la experiencia visual y hacer más intuitiva la identificación de tipos en pantalla.
+**Inspiración:** Está inspirado en la fuerza imparable de la naturaleza. Busqué un ataque que no solo hiciera daño, sino que "congelara" la lógica del juego (cancelando procesos asíncronos del oponente) para dar un cierre épico y limpio a la batalla.
 
 ---
 
-## ⚙️ Funcionalidades (Stage 1)
+## 🎮 Instrucciones de Juego (Gameplay)
 
-✔ Carga automática del Pokémon favorito desde `trainer.config.js`  
-✔ Render dinámico de sprite, stats y movimientos  
-✔ Tarjeta de entrenador personalizada (nombre, pueblo, frase)  
-✔ Búsqueda en tiempo real de oponente (con debounce)  
-✔ Cancelación de peticiones con `AbortController`  
-✔ Skeleton loading independiente para jugador y oponente  
-✔ Manejo de errores sin romper la UI  
-✔ Guardado del último oponente en `localStorage`  
-✔ Botón de batalla habilitado solo cuando ambos Pokémon están listos  
-✔ Transferencia de datos a Stage 2 usando `localStorage`  
+El motor de combate es de **acción en tiempo real** (Action-RPG). La victoria depende de tus reflejos:
+
+1.  **Movilidad:** Usa **Flecha Izquierda (←)** y **Flecha Derecha (→)** para moverte entre los 3 carriles del grid.
+2.  **Ataque:** Haz clic con el **mouse** en los movimientos disponibles. Cada ataque tiene un **Cooldown (enfriamiento)** visual que debes gestionar.
+3.  **Esquiva:** Si una celda del suelo parpadea en **rojo**, el enemigo atacará ahí en milisegundos. ¡Muévete a un carril seguro!
+4.  **Especial:** El botón de Movimiento Definitivo se habilita una vez por batalla para asegurar el KO final.
 
 ---
 
-## 🧠 Conceptos Clave
+## 🎨 Type Theming Dinámico
+El proyecto implementa un sistema de **colores dinámicos** basados en el tipo elemental (Fuego, Agua, Planta, etc.) obtenido de la PokeAPI.
 
-### 🔹 Fetch API
-- Ubicación: `stage-1/api.js`
-- Se utiliza para obtener datos desde PokeAPI (Pokémon y movimientos)
-
----
-
-### 🔹 Render dinámico (DOM)
-- Ubicación: `stage-1/render.js`
-- Toda la UI se genera dinámicamente a partir del estado
+-   **Identidad Visual:** El sistema inyecta variables CSS en tiempo real para cambiar sombras neón, fondos de barras de vida y degradados de tarjetas.
+-   **Extensión:** Aunque el requerimiento pedía theming para el jugador, lo extendí al oponente para mejorar la inmersión y facilitar la identificación visual del rival.
 
 ---
 
-### 🔹 Manejo de estado global
-- Ubicación: `stage-1/main.js`
-- Un único objeto `state` controla toda la aplicación
+## ⚙️ Funcionalidades Implementadas
+
+### 🔹 Stage 1: Preparación y Búsqueda
+✔ **Configuración Dinámica:** Carga automática del Pokémon favorito desde `trainer.config.js`.  
+✔ **Optimización de Búsqueda:** Implementación de **Debounce** para evitar saturar la API.  
+✔ **Control de Flujo:** Uso de **AbortController** para cancelar peticiones de búsqueda obsoletas.  
+✔ **Experiencia de Usuario (UX):** Skeleton loading independiente para jugador y oponente.  
+✔ **Persistencia:** Guardado del último oponente y estado de preparación en `localStorage`.
+
+### 🔹 Stage 2: Motor de Batalla (Real-Time)
+✔ **Sistema de Grid 3x1:** Lógica de posiciones para esquivar ataques entrantes.  
+✔ **IA de Combate:** Ciclos de ataque aleatorios con tiempos de reacción dinámicos.  
+✔ **Feedback de Impacto:** Animaciones de sacudida (`dmg-shake`) y marcadores visuales (✘) al recibir daño.  
+✔ **Gestión Asíncrona Robusta:** Uso de un array de `timers` para rastrear y cancelar `setTimeout` al finalizar la batalla, evitando "ataques fantasma" post-mortem.  
+✔ **Renderizado de 60fps:** Uso de `requestAnimationFrame` para cooldowns y barras de vida fluidas.
+
+---
+
+## 🧠 Conceptos Clave de Desarrollo
+
+### 1. Manejo de Estado Global (State Management)
+Ubicación: `stage-2/battle.js`  
+Toda la aplicación se rige por un único objeto `state`. Esto permite que la función de renderizado sea **predecible**: si el estado cambia (vida, posición, fase), la UI se actualiza automáticamente.
+
+### 2. Sincronización de Procesos
+Para el Stage 2, implementamos una lógica de **"Fase de Batalla"**. Al activar la victoria o derrota, el sistema cambia a `phase: 'ended'`, bloqueando inmediatamente los listeners del teclado y limpiando todos los procesos asíncronos pendientes para garantizar un cierre de código limpio.
+
+### 3. Fórmulas de Combate
+Ubicación: `stage-2/battle.js`  
+El daño no es estático; se calcula mediante algoritmos que consideran el `power` del movimiento y las estadísticas base (`attack`, `hp`) escaladas para ofrecer una experiencia equilibrada.
 
 ---
 
 ## 📁 Estructura del Proyecto
+```text
 PROYECTO2_WEB_POKEAPI/
 │
-├── index.html
-├── style.css
-├── trainer.config.js
+├── index.html              # Pantalla de inicio
+├── style.css               # Estilos globales y animaciones
+├── trainer.config.js       # Configuración del Pokémon favorito
 │
-├── stage-1/
-│ ├── index.html
-│ ├── main.js
-│ ├── api.js
-│ ├── render.js
-│ └── style.css
+├── stage-1/                # Módulo de búsqueda
+│   ├── index.html
+│   ├── main.js             # Lógica de búsqueda y filtrado
+│   ├── api.js              # Fetching y AbortController
+│   └── render.js           # Skeletons y renderizado de tarjetas
 │
-├── stage-2/
-│ └── (pendiente)
+├── stage-2/                # Módulo de batalla (Real-Time)
+│   ├── index.html
+│   ├── main.js             # Game Loop y Event Listeners
+│   ├── battle.js           # Estado global y fórmulas
+│   └── render.js           # Motor de renderizado dinámico
 │
 └── README.md
-
----
-
-## ⚠️ Problemas conocidos
-
-- Stage 2 aún no implementado
-- Algunos movimientos pueden no tener `power` en la API (se manejará en la siguiente fase)
-
----
-
-## 🚀 Estado del Proyecto
-
-✅ Stage 1 completo  
-⏳ Stage 2 en desarrollo  
-
----
-
-## 👨‍💻 Autor
-
-Proyecto desarrollado por Yordy Olivares Rosales como parte de evaluación de la materia Web1 (Vanilla JS).

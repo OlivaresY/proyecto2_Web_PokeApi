@@ -21,7 +21,7 @@ const TYPE_INFO = {
     normal: { color: '#9099a1', emoji: '🔘' }
 };
 
-// 🔥 Obtener TODOS los tipos (soporta cualquier formato)
+//Obtener TODOS los tipos (soporta cualquier formato)
 const getTypes = (pokemon) => {
     if (!pokemon?.types) return [];
 
@@ -33,10 +33,10 @@ const getTypes = (pokemon) => {
     }).filter(Boolean);
 };
 
-// 🔥 Variables de control y vida previa
+//Variables de control y vida previa
 let prevPlayerHP = null;
 let prevOpponentHP = null;
-let endScreenCreated = false; // Bandera de control para evitar duplicados
+let endScreenCreated = false; //Bandera de control para evitar duplicados
 
 export function render(state) {
     const {
@@ -56,12 +56,11 @@ export function render(state) {
 
     if (!player || !opponent) return;
 
+    //Nombres y Estética
     if (prevPlayerHP === null) prevPlayerHP = playerHP;
     if (prevOpponentHP === null) prevOpponentHP = opponentHP;
 
-    // =========================
-    // 🧠 1. NOMBRES + EMOJIS
-    // =========================
+    //NOMBRES + EMOJIS
     const pNameEl = document.getElementById("p-name");
     const oNameEl = document.getElementById("o-name");
 
@@ -78,7 +77,7 @@ export function render(state) {
         pNameEl.textContent = `${pEmojis} ${player.name.toUpperCase()}`;
         pNameEl.style.color = pColor;
         
-        // Brillo neón dinámico en el borde del contenedor
+        //Brillo neón dinámico en el borde del contenedor
         const pSection = pNameEl.closest('.hp-section');
         if (pSection) {
             pSection.style.borderLeftColor = pColor;
@@ -97,9 +96,7 @@ export function render(state) {
         }
     }
 
-    // =========================
-    // ❤️ 2. BARRAS DE VIDA
-    // =========================
+    //Barras de vida
     const updateBarVisuals = (current, max, prev, fillId, damageId) => {
         const fillEl = document.getElementById(fillId);
         const damageEl = document.getElementById(damageId);
@@ -124,9 +121,7 @@ export function render(state) {
     prevPlayerHP = playerHP;
     prevOpponentHP = opponentHP;
 
-    // =========================
-    // 📝 3. TEXTOS Y LOG
-    // =========================
+    //Registro  Y Log
     document.getElementById("player-hp-text").textContent =
         `❤️ ${Math.ceil(playerHP)} / ${playerMaxHP}`;
 
@@ -137,9 +132,7 @@ export function render(state) {
     logBox.innerHTML = log.map(m => `<p>> ${m}</p>`).join("");
     logBox.scrollTop = logBox.scrollHeight;
 
-    // =========================
-    // 🎮 4. GRID Y SPRITES
-    // =========================
+    //GRID Y SPRITES
     const cells = document.querySelectorAll(".cell");
 
     cells.forEach((cell, index) => {
@@ -150,7 +143,6 @@ export function render(state) {
 
         cell.classList.remove("warning");
 
-        // Oponente
         if (cellIndex === 2) {
             let img = cell.querySelector("#opponent-sprite");
 
@@ -166,7 +158,6 @@ export function render(state) {
                 opponent.sprites.front_default;
         }
 
-        // Jugador
         if (cellIndex === playerPosition + 3) {
             const img = document.createElement("img");
             img.id = "player-sprite";
@@ -186,9 +177,7 @@ export function render(state) {
         }
     });
 
-    // =========================
-    // ⚔️ 5. MOVIMIENTOS
-    // =========================
+    //MOVIMIENTOS
     const movesGrid = document.getElementById("normal-moves");
 
     if (movesGrid && movesGrid.innerHTML === "") {
@@ -217,26 +206,52 @@ export function render(state) {
     document.getElementById("special-move-btn").disabled =
         (attackOnCooldown || definitiveUsed || phase === 'ended');
 
-    // =========================
-    // 🏁 6. FINAL
-    // =========================
+    //Pantalla finalizacion
     if (phase === 'ended' && !endScreenCreated) {
-        if (!document.querySelector(".battle-over")) {
-            endScreenCreated = true; 
-            const isWin = playerHP > 0;
+        endScreenCreated = true; // Bloqueamos para que el setTimeout no se duplique
 
-            const div = document.createElement("div");
-            div.className = "battle-over";
+        setTimeout(() => {
+            if (!document.querySelector(".battle-over")) {
+                const isWin = playerHP > 0;
+                const winnerName = isWin ? player.name.toUpperCase() : opponent.name.toUpperCase();
 
-            div.innerHTML = `
-                <div class="end-card">
-                    <h2>${isWin ? '¡VICTORIA!' : 'DERROTA'}</h2>
-                    <p>${isWin ? TRAINER.winMessage : TRAINER.loseMessage}</p>
-                    <a href="../index.html" class="btn-volver">VOLVER AL INICIO</a>
-                </div>
-            `;
+                const overlay = document.createElement("div");
+                overlay.className = "battle-over";
 
-            document.body.appendChild(div);
-        }
-    }
+                // Fase 1: Ganador + Cuenta regresiva
+                overlay.innerHTML = `
+                    <div class="end-card" id="end-card-content">
+                        <p style="color: #ffeb3b; font-size: 1rem; margin: 0;">GANADOR DEL ENCUENTRO:</p>
+                        <h1 style="color: #fff; font-size: 2.5rem; margin: 10px 0; text-shadow: 0 0 15px rgba(255,255,255,0.5);">${winnerName}</h1>
+                        <div style="margin-top: 20px;">
+                            <span style="color: #94a3b8;">Resumen de batalla en</span>
+                            <div id="seconds" style="font-size: 3rem; font-weight: bold; color: #fff;">3</div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+
+                let secondsLeft = 3;
+                const interval = setInterval(() => {
+                    secondsLeft--;
+                    const secondsEl = document.getElementById("seconds");
+                    if (secondsEl) secondsEl.textContent = secondsLeft;
+
+                    if (secondsLeft <= 0) {
+                        clearInterval(interval);
+                        
+                        //Fase 2: Mensaje de Victoria/Derrota Final
+                        const cardContent = document.getElementById("end-card-content");
+                        cardContent.innerHTML = `
+                            <h2 style="font-size: 2rem; margin-bottom: 10px;">${isWin ? '¡VICTORIA!' : 'DERROTA'}</h2>
+                            <p style="margin-bottom: 30px; color: #cbd5e1; font-style: italic;">
+                                ${isWin ? TRAINER.winMessage : TRAINER.loseMessage}
+                            </p>
+                            <a href="../index.html" class="btn-volver">VOLVER AL INICIO</a>
+                        `;
+                    }
+                }, 1000);
+            }
+        }, 1000);
+    } 
 }

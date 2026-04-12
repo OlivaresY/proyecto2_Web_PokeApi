@@ -1,71 +1,62 @@
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+/*Configuracion base*/
+* { 
+    margin: 0; padding: 0; /*Quita el espacio extra que los navegadores ponen por defecto*/
+    box-sizing: border-box; /*Asegura que el padding no agrande el tamaño total de las cajas*/
+    font-family: 'Segoe UI', sans-serif; } /*Tipo de letra limpia y moderna*/
 
 h1, h2 {
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    text-transform: uppercase; /*Todo en mayúsculas*/
+    letter-spacing: 2px; /*Más espacio entre letras para que se vea elegante*/
 }
 
-body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+body { 
+    background: #0b0f1a; /*Color de fondo azul casi negro*/
+    color: white; /*Color de texto principal blanco*/
+    min-height: 100vh; /*Que el fondo cubra toda la altura de la pantalla*/
+    display: flex; /*Activa el modo de caja flexible*/
+    justify-content: center; /*Centra el contenido horizontalmente*/
+    align-items: center; /*Centra el contenido verticalmente*/
+}
 
-.battle-container { width: 95%; max-width: 850px; display: flex; flex-direction: column; gap: 20px; }
+.battle-container { 
+    width: 95%; /*Ocupa casi todo el ancho en celulares*/
+    max-width: 850px; /*No deja que se estire más de 850px en computadoras*/
+    display: flex; 
+    flex-direction: column; /*Apila los elementos uno arriba del otro*/
+    gap: 20px; /*Separación de 20px entre cada sección*/
+}
 
-/* --- NUEVO ESTILO AZUL ACERO (REEMPLAZA LAS QUE TIENES) --- */
-
-/* --- NUEVA CABECERA DE HP CON MÁS VIDA Y RESPLANDOR NEÓN --- */
-
+/*CABECERA Y BARRAS DE VIDA*/
 .battle-header { 
     display: flex; 
-    justify-content: space-between; 
+    justify-content: space-between; /*Pon al jugador a la izquierda y al rival a la derecha*/
     align-items: center; 
-    
-    /* MODIFICADO: Gradiente mucho más luminoso y vibrante */
-    background: linear-gradient(180deg, #3a557a 0%, #213550 100%); 
-    
+    background: linear-gradient(180deg, #3a557a 0%, #213550 100%);  /*MODIFICADO: Gradiente mucho más luminoso y vibrante*/
     padding: 20px; 
-    
-    /* MODIFICADO: Borde más claro para que resalte */
-    border: 3px solid #6c88b0; 
-    
+    border: 3px solid #6c88b0; /*MODIFICADO: Borde más claro para que resalte*/
     border-radius: 15px; 
-    
-    /* MODIFICADO: Sombra externa potente y sombra interna para brillo neón */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 
                 inset 0 0 20px rgba(255, 255, 255, 0.1); 
-    
-    /* AÑADIDO: Efecto de resplandor general de energía azul */
-    animation: headerEnergyPulse 3s infinite alternate;
+    animation: headerEnergyPulse 3s infinite alternate; /*Aplica la animación de "pulso"*/
 }
 
 .hp-section { 
-    width: 43%; 
+    width: 43%; /*Cada barra de vida ocupa casi la mitad de la cabecera*/
     padding: 10px;
-    
-    /* MODIFICADO: Fondo interno oscuro pero con transparencia elegante */
-    background: rgba(0, 0, 0, 0.25); 
-    
+    background: rgba(0, 0, 0, 0.25); /*Fondo negro semitransparente*/
     border-radius: 12px;
-    
-    /* Este borde izquierdo brillará con el color del tipo gracias al JS */
-    border-left: 5px solid #3a69af; 
-    
-    /* MODIFICADO: Brillo neón interno suave (el JS lo hará dinámico) */
+    border-left: 5px solid #3a69af; /*Rayita de color a la izquierda*/
     box-shadow: inset 0 0 15px rgba(58, 105, 175, 0.3);
-    
-    transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out; /*Suaviza los cambios de color o brillo */
 }
 
 .name-label { 
     display: block; 
-    font-weight: 900; 
-    
-    /* MODIFICADO: Amarillo más intenso y saturado */
-    color: #ffeb3b; 
-    
+    font-weight: 900; /*Letra muy gruesa*/ 
+    color: #ffeb3b; /*Color amarillo Pokémon*/ 
     margin-bottom: 8px; 
     text-transform: uppercase; 
-    
-    /* MODIFICADO: Sombra de texto nítida para contraste perfecto */
-    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7),
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.7), /* Sombra negra tras el texto para que se lea mejor */
                  0 0 8px rgba(255, 235, 59, 0.5); /* Resplandor amarillo suave */
 }
 
@@ -75,51 +66,75 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
     100% { box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(108, 136, 176, 0.3); }
 }
 
-/* Grid 3x2 */
+/*EL TABLERO (ARENA)*/
 .arena { display: flex; justify-content: center; }
-.grid { display: grid; grid-template-columns: repeat(3, 130px); grid-template-rows: repeat(2, 130px); gap: 12px; }
-.cell { background: #15294b; border: 2px solid #3a69af; border-radius: 10px; display: flex; justify-content: center; align-items: center; position: relative; }
-.cell.warning { background: rgba(239, 68, 68, 0.3); border-color: #ef4444; box-shadow: 0 0 15px #ef4444; }
-
-.sprite { width: 90px; height: 90px; object-fit: contain; position: relative; z-index: 5; }
-
-.hp-bar {
-    position: relative; /* IMPORTANTE */
-    width: 100%;
-    height: 15px;
-    background: #0f172a;
-    border: 1px solid #3a69af;
-    border-radius: 10px;
-    overflow: hidden;
+.grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 130px); /* Crea 3 columnas de 130px cada una */
+    grid-template-rows: repeat(2, 130px);    /* Crea 2 filas de 130px cada una */
+    gap: 12px;                               /* Espacio entre cada casilla */
+}
+.cell {
+    background: #15294b; /*Fondo azul oscuro de la casilla*/
+    border: 2px solid #3a69af; /*Borde azul brillante*/
+    border-radius: 10px; 
+    display: flex; /*Centra el Pokémon dentro de la casilla*/
+    justify-content: center; 
+    align-items: center; 
+    position: relative; /*Permite que otros elementos se ubiquen encima con precisión*/
 }
 
-/* Barra VERDE (vida actual) */
+/*Cuando el suelo se pone rojo por un ataque enemigo*/
+.cell.warning {
+    background: rgba(239, 68, 68, 0.3); /*Rojo transparente*/
+    border-color: #ef4444; /*Borde rojo intenso*/
+    box-shadow: 0 0 15px #ef4444;/*Resplandor neón rojo*/
+}
+
+.sprite {
+    width: 90px; height: 90px; 
+    object-fit: contain; /*Ajusta la imagen del Pokémon sin deformarla*/
+    position: relative; 
+    z-index: 5; /*Asegura que el Pokémon se vea por encima del suelo*/
+}
+
+/*BARRAS DE VIDA (ANIMACIÓN)*/
+.hp-bar {
+    position: relative; /*Contenedor padre de las barras de color*/
+    width: 100%;
+    height: 15px;
+    background: #0f172a; /*Fondo de la barra cuando está vacía*/
+    border: 1px solid #3a69af; 
+    border-radius: 10px;
+    overflow: hidden; /*Corta lo que sobresalga de los bordes redondeados*/
+}
+
+/*Barra VERDE (vida actual)*/
 .hp-fill {
-    position: absolute;
+    position: absolute; /*Se dibuja encima del fondo oscuro*/
     top: 0;
     left: 0;
     height: 100%;
-    background: #4ade80;
-    width: 100%;
-    transition: width 0.3s ease;
-    z-index: 2;
+    background: #4ade80; /*Color verde salud*/
+    width: 100%; /*Empieza llena al 100%*/
+    transition: width 0.3s ease; /*Cuando la vida baja, se mueve suave durante 0.3 segundos*/
+    z-index: 2; /*Está por encima de la barra roja*/
 }
 
-/* 🔴 Barra ROJA (daño recibido) */
+/*Barra ROJA (daño recibido)*/
 .damage-fill {
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
-    background: #ef4444; /* ROJO */
+    background: #ef4444; /*Color rojo de daño*/
     width: 100%;
-    transition: width 0.6s ease;
-    z-index: 1;
-    opacity: 0.7;
+    transition: width 0.6s ease; /*Se mueve más lento (0.6s) para crear el efecto de "rastro"*/
+    z-index: 1; /*Queda detrás de la barra verde*/
+    opacity: 0.7; /*Un poco transparente*/
 }
 
-/* --- CONTROLES: ESTILO VIBRANTE (IMAGEN 2) PERO TAMAÑO ORIGINAL --- */
-/* --- CONTROLES: RELIEVE 3D Y BOTÓN ESPECIAL VIBRANTE --- */
+/*CONTROLES: ESTILO VIBRANTE (IMAGEN 2) PERO TAMAÑO ORIGINAL*/
 .battle-controls { 
     display: grid; 
     grid-template-columns: 1.2fr 0.8fr; 
@@ -132,8 +147,7 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
     gap: 10px; /* Un pelín más de aire entre botones */
 }
 
-/* Botones de ataque normales: Más "levantados" */
-
+/*Botones de ataque normales*/
 .move-btn { 
     background: linear-gradient(180deg, #f2d33b 0%, #d4b834 100%); 
     color: #0b0f1a; /* color base (no morado aquí) */
@@ -141,7 +155,7 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
     padding: 12px; 
     font-weight: 900; 
     border-radius: 8px; 
-    cursor: pointer; 
+    cursor: pointer;  /*Cambia la flecha del mouse por una mano*/
     position: relative; 
     overflow: hidden; 
     text-transform: uppercase;
@@ -178,8 +192,7 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
 }
 
 
-/* --- BOTÓN ESPECIAL: MÁXIMA VIBRACIÓN --- */
-/* --- BOTÓN ESPECIAL: TEXTO ROJO DINÁMICO --- */
+/*BOTÓN ESPECIAL*/
 .special-btn { 
     width: 100%; 
     margin-top: 8px; 
@@ -197,28 +210,18 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
     cursor: pointer; 
     text-transform: uppercase;
     letter-spacing: 2px;
-    
-    /* Sombra de apoyo */
+    /*Sombra de apoyo */
     box-shadow: 0 4px 0 #660000, 0 0 10px rgba(255, 0, 0, 0.2);
-    
-    /* Animación de pulso suave en el borde/sombra */
     animation: specialGlow 1.5s infinite alternate;
-    
     transition: all 0.2s ease;
     transform: translateY(-2px);
 }
 
-/* Cuando el mouse pasa por encima (Hover) */
+/*Cuando el mouse pasa por encima (Hover)*/
 .special-btn:hover {
     /* El fondo se vuelve rojo vibrante */
     background: linear-gradient(180deg, #ff1a1a 0%, #cc0000 100%);
-    
-    /* LAS LETRAS SE MANTIENEN ROJAS (o un rojo más intenso/blanco para legibilidad) */
-    /* Como pediste que se vuelvan rojas al pasar el mouse también: */
-    color: #ffffff; /* Sugerencia: Blanco o Amarillo para que se lea sobre el fondo rojo */
-    /* Si las quieres estrictamente rojas sobre fondo rojo, usa un rojo muy oscuro: */
-    /* color: #4b0000; */
-    
+    color: #ffffff;
     border-color: #ffffff;
     transform: translateY(-4px) scale(1.02);
     box-shadow: 0 6px 0 #800000, 0 0 25px rgba(255, 0, 0, 0.6);
@@ -321,7 +324,7 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
     box-shadow: 0 2px 0 #b59b1d;
 }
 
-/* --- EFECTOS DE DAÑO (CORE) --- */
+/*EFECTOS DE DAÑO (CORE)*/
 @keyframes shake {
     0% { transform: translate(1px, 1px); }
     20% { transform: translate(-3px, 0px); }
@@ -341,17 +344,17 @@ body { background: #0b0f1a; color: white; min-height: 100vh; display: flex; just
 }
 
 .damage-x {
-    position: absolute;
+    position: absolute; /*Aparece justo en el centro del golpe*/
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: #ef4444;
-    font-size: 7rem;
+    font-size: 7rem; /*Tamaño gigante de la X*/
     font-weight: bold;
-    pointer-events: none;
-    z-index: 999;
+    pointer-events: none; /*Evita que la X estorbe si quieres hacer clic en algo abajo*/
+    z-index: 999; /*Siempre al frente de todo*/
     text-shadow: 0 0 20px black;
-    animation: x-anim 0.5s ease-out forwards;
+    animation: x-anim 0.5s ease-out forwards; /*Animación de agrandarse y desaparecer*/
 }
 
 @keyframes x-anim {

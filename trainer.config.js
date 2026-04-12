@@ -11,7 +11,7 @@ const TRAINER = {
   definitiveMoveFlavor: "Una ola gigante destruye todo a su paso.",
 
   winMessage: "Sabía que ganaríamos.",
-  loseMessage: "Esto no termina aquí."
+  loseMessage: "Tus pokemones necesitan un descanso."
 };
 
 export default TRAINER;
